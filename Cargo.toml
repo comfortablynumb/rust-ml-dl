@@ -41,6 +41,9 @@ members = [
     "examples/38-model-compression",
     "examples/39-contrastive-learning",
     "examples/40-masked-modeling",
+    "examples/41-efficient-transformers",
+    "examples/42-diffusion-applications",
+    "examples/43-neural-odes",
 ]
 
 [workspace.package]

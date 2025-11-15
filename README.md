@@ -1,6 +1,6 @@
 # Rust Machine Learning & Deep Learning Examples
 
-A comprehensive collection of **40 fully documented machine learning and deep learning examples** implemented in Rust, covering the complete spectrum from fundamentals to cutting-edge AI architectures.
+A comprehensive collection of **43 fully documented machine learning and deep learning examples** implemented in Rust, covering the complete spectrum from fundamentals to cutting-edge AI architectures.
 
 ## Overview
 
@@ -1484,6 +1484,160 @@ Answer: "The cat sat on the mat"
 
 ---
 
+## Advanced Topics & Extensions
+
+### 41. Efficient Transformers ⚡
+**Path:** `examples/41-efficient-transformers`
+**Run:** `cargo run --package efficient-transformers`
+
+Making Transformers fast and scalable by reducing O(n²) attention complexity to O(n) through clever algorithms.
+
+**The Problem:**
+- Standard attention: O(n²) memory and compute
+- For n=16384: 256M operations (impossible!)
+- Limits Transformers to 512-2048 tokens
+
+**Solutions:**
+
+**1. Linear Attention** (O(n))
+- Reorder computation: φ(Q)(φ(K)^TV) instead of (QK^T)V
+- Complexity: O(n) instead of O(n²)
+- Trade-off: 1-2% accuracy loss for 10-100× speedup
+
+**2. Flash Attention** (Exact, O(n) memory)
+- Tiled computation + online softmax
+- Never materialize full n×n matrix
+- Speedup: 2-4× faster, 5-20× less memory
+- **Used in GPT-4, Llama 2, PaLM**
+
+**3. Sparse Attention Patterns**
+- Local: Each token attends to k neighbors
+- Strided: Every s-th token attends globally
+- Complexity: O(nk) where k << n
+- **Used in Longformer, BigBird**
+
+**Modern Models:**
+- GPT-4: 32K context (Flash Attention)
+- Claude 2: 100K context (efficient attention)
+- Longformer: 4K tokens (sparse patterns)
+
+**Impact:** Enabled long-context AI - without efficient attention, models would be limited to 512 tokens!
+
+---
+
+### 42. Diffusion Model Applications 🎨
+**Path:** `examples/42-diffusion-applications`
+**Run:** `cargo run --package diffusion-applications`
+
+Practical applications extending diffusion models: text-to-image, editing, inpainting, and classifier-free guidance. Powers Stable Diffusion, DALL-E, Midjourney.
+
+**Applications:**
+
+**1. Text-to-Image Generation**
+- Architecture: CLIP text encoder + latent diffusion + VAE decoder
+- Input: "A cat on Mars"
+- Output: Photorealistic 512×512 image
+- **Powers:** Stable Diffusion, DALL-E 2, Midjourney
+
+**2. Classifier-Free Guidance** (The Secret Sauce!)
+```
+ε̂_guided = ε̂_uncond + w × (ε̂_cond - ε̂_uncond)
+
+w=7.5: Stable Diffusion default (balanced)
+w=15.0: Very literal prompt following
+```
+- Amplifies "direction" toward text prompt
+- Essential for high-quality generation
+
+**3. Image Inpainting**
+- Fill masked regions intelligently
+- Remove objects, add elements, outpainting
+- Applications: Object removal, face restoration
+
+**4. Image Editing**
+- Modify existing images with text prompts
+- SDEdit: Partial noise + denoise with new prompt
+- Instruct-Pix2Pix: "Make it sunset"
+
+**5. Latent Diffusion** (Stable Diffusion's efficiency)
+- VAE: 512×512 → 64×64 latent (64× faster!)
+- Diffusion in compressed space
+- Decode at end: latent → final image
+
+**Advanced Techniques:**
+- **ControlNet**: Spatial control (depth, pose, sketch)
+- **LoRA**: Fast fine-tuning (1-10MB adapters)
+- **Fast samplers**: DPM-Solver (20 steps vs 50)
+
+**Real-World:**
+- Stable Diffusion: 860M params, runs on consumer GPUs
+- Midjourney: $1B company, artistic style
+- Adobe Firefly: Integrated in Photoshop
+
+**Impact:** The AI art revolution - democratized creativity, billion-dollar industry!
+
+---
+
+### 43. Neural ODEs (Ordinary Differential Equations) 🌊
+**Path:** `examples/43-neural-odes`
+**Run:** `cargo run --package neural-odes`
+
+Continuous-depth neural networks using differential equations: Elegant theory, memory-efficient backprop, perfect for irregular time series.
+
+**Core Idea:**
+```
+Traditional ResNet: h_{t+1} = h_t + f(h_t)  [Discrete layers]
+Neural ODE:         dh/dt = f(h(t), t)      [Continuous transformation]
+
+Solve ODE: h(T) = h(0) + ∫₀ᵀ f(h(t), t) dt
+```
+
+**Key Insight:** ResNet is just Euler discretization of an ODE!
+
+**Benefits:**
+
+**1. Memory Efficiency** (Adjoint Method)
+- Standard backprop: O(depth) memory
+- Adjoint method: O(1) memory (constant!)
+- Backward ODE: da/dt = -a^T ∂f/∂h
+
+**2. Adaptive Computation**
+- Easy inputs: Fewer ODE solver steps
+- Hard inputs: More steps automatically
+- vs ResNet: Fixed computation always
+
+**3. Continuous Depth**
+- Can evaluate at any "depth" t
+- h(0.5): Halfway through transformation
+- h(2.0): "Deeper" than standard network
+
+**4. Irregular Time Series**
+- Perfect for non-uniform sampling
+- Medical records, sensor data, financial data
+- No resampling needed!
+
+**ODE Solvers:**
+- **Euler**: Simple, less accurate
+- **RK4**: 4th order, more accurate
+- **DOPRI5**: Adaptive step size (best for Neural ODEs)
+
+**Applications:**
+- **Irregular time series**: Medical records (varying intervals)
+- **Normalizing flows**: Continuous transformations
+- **Physical systems**: Learn dynamics from observations
+- **Memory-constrained**: When depth limited by memory
+
+**Variants:**
+- **Augmented Neural ODEs**: Add auxiliary dimensions (more expressive)
+- **Latent ODEs**: Handle missing data
+- **Hamiltonian Neural Networks**: Energy-conserving dynamics
+
+**Awards:** Best Paper NeurIPS 2018
+
+**Impact:** Unified deep learning and differential equations, enabled memory-efficient deep networks, perfect for irregular data!
+
+---
+
 ## Project Structure
 
 ```
@@ -1530,11 +1684,14 @@ rust-ml-dl/
     ├── 37-advanced-optimizers/   # Optimization: Adam, RMSprop, Schedules 🚀
     ├── 38-model-compression/     # Deployment: Pruning, Quantization, Distillation 📦
     ├── 39-contrastive-learning/  # Self-Supervised: SimCLR, MoCo, CLIP 🔥
-    └── 40-masked-modeling/       # Self-Supervised: BERT, GPT, MAE 🎭
+    ├── 40-masked-modeling/       # Self-Supervised: BERT, GPT, MAE 🎭
+    ├── 41-efficient-transformers/  # Advanced: O(n) Attention, Flash Attention ⚡
+    ├── 42-diffusion-applications/  # Advanced: Text-to-Image, Editing, Inpainting 🎨
+    └── 43-neural-odes/            # Advanced: Continuous Depth, Memory-Efficient 🌊
 ```
 
 ⭐ = Implemented from scratch
-🔥🚀🏆🔗🎨📊🌟🕸️🔍👁️📦👯🎮🔧🛡️🔄💬🧠🎓🔍 = Advanced deep learning architectures & training techniques
+🔥🚀🏆🔗🎨📊🌟🕸️🔍👁️📦👯🎮🔧🛡️🔄💬🧠🎓🔍⚡🌊 = Advanced deep learning architectures & training techniques
 
 ## Learning Paths
 
@@ -1582,6 +1739,22 @@ rust-ml-dl/
 31. **31-mixture-of-experts** - Sparse activation, trillion-scale models (GPT-4)
 32. **32-meta-learning** - Learning to learn, few-shot adaptation (MAML)
 33. **33-neural-architecture-search** - AutoML, automated architecture discovery (NAS)
+
+### 📊 Practical Machine Learning Applications
+34. **34-time-series-forecasting** - ARIMA, Prophet, LSTM for sequential predictions
+35. **35-recommendation-systems** - Collaborative filtering, matrix factorization, neural CF
+36. **36-anomaly-detection** - Isolation Forest, autoencoders, One-Class SVM
+
+### 🔥 Deep Learning Optimization & Self-Supervised Learning
+37. **37-advanced-optimizers** - Adam, AdamW, RMSprop, learning rate schedules
+38. **38-model-compression** - Pruning, quantization, distillation (10-100× smaller)
+39. **39-contrastive-learning** - SimCLR, MoCo, CLIP (powers Stable Diffusion)
+40. **40-masked-modeling** - BERT, GPT, MAE (foundation of ChatGPT)
+
+### 🌟 Advanced Topics & Extensions
+41. **41-efficient-transformers** - O(n) attention, Flash Attention, sparse patterns (GPT-4, Claude 2)
+42. **42-diffusion-applications** - Text-to-image, inpainting, editing, classifier-free guidance (Stable Diffusion)
+43. **43-neural-odes** - Continuous depth, adjoint method, irregular time series (NeurIPS 2018 Best Paper)
 
 ## Libraries Used
 
@@ -1644,9 +1817,9 @@ cargo build --workspace
 ## What's New in This Version
 
 ### 🎯 Comprehensive Coverage
-- **40 examples** covering the entire ML/DL landscape from fundamentals to cutting-edge production techniques
-- Clear progression: Fundamentals → Traditional ML → Deep Learning → State-of-the-Art → Training Techniques → Advanced Modern → Practical Applications → Optimization & Self-Supervised
-- Seven learning tracks: Beginner 🟢 → Intermediate 🟡 → Advanced 🔴 → Expert 🟣 → Training Techniques ⚡ → Advanced Modern 🚀 → Practical ML 📊 → Modern AI 🔥
+- **43 examples** covering the entire ML/DL landscape from fundamentals to cutting-edge production techniques
+- Clear progression: Fundamentals → Traditional ML → Deep Learning → State-of-the-Art → Training Techniques → Advanced Modern → Practical Applications → Optimization & Self-Supervised → Advanced Topics & Extensions
+- Eight learning tracks: Beginner 🟢 → Intermediate 🟡 → Advanced 🔴 → Expert 🟣 → Training Techniques ⚡ → Advanced Modern 🚀 → Practical ML 📊 → Modern AI 🔥 → Advanced Extensions 🌟
 
 ### 🆕 Deep Learning Architectures (11 Core + 5 Advanced)
 **Core Architectures:**
@@ -1788,5 +1961,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
    - `38-model-compression`: Pruning, quantization, distillation - **production deployment essential**
    - `39-contrastive-learning`: SimCLR, MoCo, CLIP - **learn from unlabeled data, powers Stable Diffusion**
    - `40-masked-modeling`: BERT, GPT, MAE - **foundation of ChatGPT and modern NLP/vision**
+10. **Advanced Topics & Extensions** (41-43):
+   - `41-efficient-transformers`: Linear attention (O(n)), Flash Attention, sparse patterns - **enables GPT-4's 32K context, Claude 2's 100K**
+   - `42-diffusion-applications`: Text-to-image, classifier-free guidance, inpainting, image editing - **Stable Diffusion, DALL-E, Midjourney**
+   - `43-neural-odes`: Continuous depth, adjoint method (O(1) memory), irregular time series - **elegant theory, NeurIPS 2018 Best Paper**
 
-Each example builds on previous concepts, so following the numbered order is recommended! The complete path takes you from basics to cutting-edge AI, production techniques, practical applications, modern optimization, and self-supervised learning - the future of AI.
+Each example builds on previous concepts, so following the numbered order is recommended! The complete path takes you from basics to cutting-edge AI, production techniques, practical applications, modern optimization, self-supervised learning, and advanced extensions - the complete modern AI landscape.

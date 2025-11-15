@@ -197,6 +197,22 @@ dependencies = [
 ]
 
 [[package]]
+name = "diffusion-applications"
+version = "0.1.0"
+dependencies = [
+ "ndarray 0.16.1",
+ "rand",
+]
+
+[[package]]
+name = "efficient-transformers"
+version = "0.1.0"
+dependencies = [
+ "ndarray 0.16.1",
+ "rand",
+]
+
+[[package]]
 name = "either"
 version = "1.15.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -605,6 +621,14 @@ dependencies = [
  "anyhow",
  "ndarray 0.15.6",
  "ndarray-rand",
+ "rand",
+]
+
+[[package]]
+name = "neural-odes"
+version = "0.1.0"
+dependencies = [
+ "ndarray 0.16.1",
  "rand",
 ]
 
