@@ -1,6 +1,6 @@
 # Rust Machine Learning & Deep Learning Examples
 
-A comprehensive collection of **13 fully documented machine learning and deep learning examples** implemented in Rust, organized in a clear learning progression.
+A comprehensive collection of **16 fully documented machine learning and deep learning examples** implemented in Rust, organized in a clear learning progression.
 
 ## Overview
 
@@ -273,6 +273,112 @@ Unsupervised learning for compression, denoising, and generation.
 
 ---
 
+### 14. Generative Adversarial Networks (GANs) 🔥
+**Path:** `examples/14-gan`
+**Run:** `cargo run --package gan`
+
+Revolutionary architecture for generating realistic data through adversarial training.
+
+**Key Concepts:**
+- Generator vs Discriminator competition
+- Adversarial training process
+- Non-saturating loss functions
+- Mode collapse and training instability
+
+**Architecture:**
+- Generator: Noise → Fake Data
+- Discriminator: Real/Fake → Probability
+- Min-max game: G tries to fool D, D tries to detect fakes
+
+**Variants:**
+- DCGAN (Convolutional for images)
+- CGAN (Conditional generation)
+- CycleGAN (Domain translation)
+- StyleGAN (High-quality faces)
+- WGAN (Wasserstein distance)
+
+**Applications:** Image generation, style transfer, data augmentation, drug discovery, deepfakes
+
+**Modern Context:** While diffusion models (Stable Diffusion, DALL-E) have overtaken GANs for image generation, GANs remain important for real-time applications and video games
+
+**Famous:** ThisPersonDoesNotExist.com, StyleGAN face generation
+
+---
+
+### 15. Transformer Architecture 🚀
+**Path:** `examples/15-transformer`
+**Run:** `cargo run --package transformer`
+
+The architecture that revolutionized AI - powers GPT, BERT, ChatGPT, and most modern AI systems.
+
+**Core Innovation:**
+- Self-attention mechanism (learns which words relate)
+- Multi-head attention (learns different relationships)
+- Positional encoding (handles word order)
+- Parallel processing (unlike sequential RNNs)
+
+**Architecture:**
+- Encoder: Bidirectional processing
+- Decoder: Autoregressive generation
+- Attention(Q, K, V) = softmax(QK^T / √d_k) · V
+
+**Famous Variants:**
+- **BERT** (Encoder-only): Text understanding, Q&A
+- **GPT** (Decoder-only): Text generation, ChatGPT
+- **T5** (Full encoder-decoder): Translation, summarization
+- **Vision Transformer** (ViT): Image classification
+- **CLIP**: Vision-language connections
+
+**Why Transformers Won:**
+- Parallelization: 100× faster than RNNs
+- Long-range dependencies: Direct connections
+- Scalability: More params + data = better performance
+
+**Applications:** NLP (translation, generation), code (GitHub Copilot), vision (ViT, DALL-E), speech (Whisper), science (AlphaFold 2)
+
+**Impact:** From GPT-1 (117M params, 2018) → GPT-4 (~1.7T params, 2023)
+
+---
+
+### 16. Residual Networks (ResNet) 🏆
+**Path:** `examples/16-resnet`
+**Run:** `cargo run --package resnet`
+
+The architecture that solved the degradation problem and enabled extremely deep networks (100+ layers).
+
+**Problem Solved:**
+- Before ResNet: Deeper networks performed **worse** (degradation problem)
+- After ResNet: 152-layer networks outperform shallow ones
+
+**Core Innovation: Skip Connections**
+```
+Output = F(x) + x
+```
+- F(x): Learned residual (what to add)
+- x: Input passed through unchanged (identity shortcut)
+
+**Benefits:**
+- Easier gradient flow through skip connections
+- Easy to learn identity (just set F(x) = 0)
+- Each layer refines representation
+
+**Variants:**
+- ResNet-18/34: Basic blocks, 11-21M params
+- ResNet-50/101/152: Bottleneck blocks, 25-60M params
+- ResNeXt: Adds cardinality dimension
+- Wide ResNet: Wider layers, better speed/accuracy
+
+**Historical Impact:**
+- Won ImageNet 2015: 3.57% error (superhuman!)
+- First model to beat human performance (5.1%)
+- Most cited computer vision paper (100,000+ citations)
+
+**Applications:** Image classification, object detection (Faster R-CNN), semantic segmentation, face recognition, medical imaging
+
+**Modern Status:** Still widely used as backbone despite Vision Transformers; excellent for transfer learning
+
+---
+
 ## Project Structure
 
 ```
@@ -290,13 +396,16 @@ rust-ml-dl/
     ├── 08-gradient-descent/      # Optimization ⭐
     ├── 09-neural-network/        # Deep Learning basics ⭐
     ├── 10-deep-learning-basics/  # DL concepts & theory
-    ├── 11-cnn/                   # DL Architecture: Images 🆕
-    ├── 12-rnn/                   # DL Architecture: Sequences 🆕
-    └── 13-autoencoder/           # DL Architecture: Unsupervised 🆕
+    ├── 11-cnn/                   # DL Architecture: Images
+    ├── 12-rnn/                   # DL Architecture: Sequences
+    ├── 13-autoencoder/           # DL Architecture: Unsupervised
+    ├── 14-gan/                   # DL Architecture: Generative 🔥
+    ├── 15-transformer/           # DL Architecture: Attention 🚀
+    └── 16-resnet/                # DL Architecture: Very Deep 🏆
 ```
 
 ⭐ = Implemented from scratch
-🆕 = New deep learning architecture examples
+🔥🚀🏆 = Advanced deep learning architectures
 
 ## Learning Paths
 
@@ -318,6 +427,9 @@ rust-ml-dl/
 11. **11-cnn** - Computer vision architecture
 12. **12-rnn** - Sequential data architecture
 13. **13-autoencoder** - Unsupervised deep learning
+14. **14-gan** - Generative models & adversarial training
+15. **15-transformer** - Attention mechanisms & modern NLP
+16. **16-resnet** - Very deep networks & skip connections
 
 ## Libraries Used
 
@@ -361,6 +473,9 @@ cargo run --package deep-learning-basics
 cargo run --package cnn
 cargo run --package rnn
 cargo run --package autoencoder
+cargo run --package gan
+cargo run --package transformer
+cargo run --package resnet
 ```
 
 Build all examples:
@@ -372,18 +487,22 @@ cargo build --workspace
 ## What's New in This Version
 
 ### 🎯 Organized Structure
-- Examples now numbered 01-13 in logical learning order
-- Clear progression from basics to advanced topics
+- Examples now numbered 01-16 in logical learning order
+- Clear progression from basics to state-of-the-art architectures
 
-### 🆕 Three New Deep Learning Architectures
+### 🆕 Six Deep Learning Architectures
 - **CNN**: Convolutional networks for computer vision
 - **RNN**: Recurrent networks for sequences (text, time series)
 - **Autoencoder**: Unsupervised learning for compression and generation
+- **GAN**: Generative adversarial networks for data generation
+- **Transformer**: Attention mechanisms powering GPT, BERT, ChatGPT
+- **ResNet**: Residual networks enabling very deep architectures
 
 ### 📖 Enhanced Documentation
 - Each example includes comprehensive theory
 - Mathematical foundations with clear explanations
 - Real-world applications and use cases
+- Historical context and modern impact
 - Comparisons between techniques
 
 ## Prerequisites
@@ -445,6 +564,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 3. Master `08-gradient-descent` (optimization fundamentals)
 4. Progress to `09-neural-network` (DL basics)
 5. Study `10-deep-learning-basics` (theory)
-6. Explore architectures: `11-cnn`, `12-rnn`, `13-autoencoder`
+6. Explore core architectures: `11-cnn`, `12-rnn`, `13-autoencoder`
+7. Master advanced architectures: `14-gan`, `15-transformer`, `16-resnet`
 
 Each example builds on previous concepts, so following the numbered order is recommended!

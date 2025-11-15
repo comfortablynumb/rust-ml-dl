@@ -14,6 +14,9 @@ members = [
     "examples/11-cnn",
     "examples/12-rnn",
     "examples/13-autoencoder",
+    "examples/14-gan",
+    "examples/15-transformer",
+    "examples/16-resnet",
 ]
 
 [workspace.package]
