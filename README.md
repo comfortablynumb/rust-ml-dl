@@ -1,6 +1,6 @@
 # Rust Machine Learning & Deep Learning Examples
 
-A comprehensive collection of **26 fully documented machine learning and deep learning examples** implemented in Rust, covering the complete spectrum from fundamentals to cutting-edge AI architectures.
+A comprehensive collection of **29 fully documented machine learning and deep learning examples** implemented in Rust, covering the complete spectrum from fundamentals to cutting-edge AI architectures.
 
 ## Overview
 
@@ -730,6 +730,132 @@ Goal: Maximize cumulative reward
 
 ---
 
+## Essential Training Techniques
+
+### 27. Normalization Techniques 🔧
+**Path:** `examples/27-normalization`
+**Run:** `cargo run --package normalization`
+
+Critical techniques enabling deep network training: BatchNorm, LayerNorm, GroupNorm, InstanceNorm.
+
+**Problem Solved: Internal Covariate Shift**
+- Activations shift during training
+- Deep networks become unstable
+- Normalization stabilizes and accelerates training
+
+**Key Techniques:**
+- **BatchNorm**: Normalize across batch (CNNs, large batches)
+- **LayerNorm**: Normalize across features (Transformers, RNNs)
+- **GroupNorm**: Normalize within groups (small batches, CNNs)
+- **InstanceNorm**: Normalize per sample (style transfer, GANs)
+
+**Benefits:**
+- 10-100× faster training convergence
+- Higher learning rates possible
+- Reduces sensitivity to initialization
+- Acts as regularization
+
+**When to Use:**
+- CNNs + large batch → BatchNorm
+- CNNs + small batch → GroupNorm
+- Transformers/RNNs → LayerNorm
+- Style transfer/GANs → InstanceNorm
+
+**Impact:** Enabled ResNet-152 (2015), GPT-3 (LayerNorm), all modern deep networks rely on normalization
+
+---
+
+### 28. Regularization & Dropout 🛡️
+**Path:** `examples/28-regularization`
+**Run:** `cargo run --package regularization`
+
+Essential techniques to prevent overfitting and improve model generalization.
+
+**Core Problem: Overfitting**
+- Model memorizes training data
+- Poor performance on new data
+- Need to constrain model complexity
+
+**Key Techniques:**
+- **L2 Regularization** (Weight Decay): `Loss + λ × Σw²` → Prevents large weights
+- **L1 Regularization** (Lasso): `Loss + λ × Σ|w|` → Sparse models, feature selection
+- **Dropout**: Randomly drop neurons during training → Ensemble effect
+- **DropConnect**: Drop weights instead of activations
+- **Early Stopping**: Stop when validation loss stops improving
+- **Data Augmentation**: Increase effective dataset size
+
+**Dropout Rates:**
+- Fully connected layers: 0.5
+- CNNs: 0.1-0.3
+- Input layer: 0.1-0.2
+
+**Typical Configurations:**
+- **ResNet**: L2=0.0001, no dropout (BatchNorm provides regularization)
+- **Transformer**: L2=0.01, Dropout=0.1
+- **Small dataset**: L2=0.01, Dropout=0.5, heavy augmentation
+
+**Applications:** All production models use multiple regularization techniques to prevent overfitting
+
+**Impact:** Dropout (2012) became standard in neural networks, essential for training with limited data
+
+---
+
+### 29. Transfer Learning & Fine-Tuning 🔄
+**Path:** `examples/29-transfer-learning`
+**Run:** `cargo run --package transfer-learning`
+
+**The most practical deep learning workflow**: Start from pre-trained models and adapt to your specific task.
+
+**Why Transfer Learning?**
+- Train with 10-100× less data
+- Converge 10× faster
+- Better final performance
+- Enable DL for small datasets
+
+**Core Idea:**
+- Pre-train on large dataset (ImageNet, Wikipedia)
+- Transfer knowledge to your task
+- Fine-tune on your data (100s vs millions of samples)
+
+**Two Approaches:**
+
+**1. Feature Extraction (Freeze Early Layers)**
+```
+Input → [Frozen Backbone] → [New Trainable Head]
+```
+- When: Small dataset (<1K), similar to pre-training
+- Training time: Minutes instead of hours
+
+**2. Fine-Tuning (Train All Layers)**
+```
+Stage 1: Train head only (2-5 epochs)
+Stage 2: Unfreeze all, small LR (10-20 epochs)
+```
+- When: Larger dataset (>10K), different from pre-training
+- Use discriminative learning rates per layer
+
+**Popular Models:**
+- **Vision**: ResNet-50 (ImageNet), EfficientNet, ViT
+- **NLP**: BERT (Wikipedia), RoBERTa, GPT-2, T5
+- **Multi-modal**: CLIP (image + text)
+
+**Key Insights:**
+- Early layers learn universal features (edges, textures)
+- Later layers learn task-specific features
+- Use 10-100× smaller learning rate than training from scratch
+- **Critical**: Match pre-training normalization exactly!
+
+**Real-World Results:**
+- Medical imaging: 85% → 92% accuracy vs from scratch
+- Sentiment analysis: 89% with 5K samples (would need 50K+ from scratch)
+- Object detection: Works with 1K images (would need 10K+ from scratch)
+
+**Applications:** Production deep learning, medical imaging, custom object detection, domain adaptation, few-shot learning
+
+**Impact:** How practitioners actually use deep learning - transfer learning is the default workflow in industry
+
+---
+
 ## Project Structure
 
 ```
@@ -758,15 +884,18 @@ rust-ml-dl/
     ├── 19-vae/                   # DL Architecture: Probabilistic Gen 📊
     ├── 20-diffusion/             # DL Architecture: State-of-the-Art 🌟
         ├── 21-gnn/                   # DL Architecture: Graph Data 🕸️
-    ├── 22-attention/            # Core Concept: Attention 🔍
-    ├── 23-vision-transformer/   # Transformers for Vision 👁️
-    ├── 24-object-detection/     # Real-time Detection 📦
-    ├── 25-siamese-networks/     # Similarity Learning 👯
-    └── 26-reinforcement-learning/ # RL & DQN 🎮
+    ├── 22-attention/             # Core Concept: Attention 🔍
+    ├── 23-vision-transformer/    # Transformers for Vision 👁️
+    ├── 24-object-detection/      # Real-time Detection 📦
+    ├── 25-siamese-networks/      # Similarity Learning 👯
+    ├── 26-reinforcement-learning/ # RL & DQN 🎮
+    ├── 27-normalization/         # Training Techniques: Normalization 🔧
+    ├── 28-regularization/        # Training Techniques: Regularization 🛡️
+    └── 29-transfer-learning/     # Training Techniques: Transfer Learning 🔄
 ```
 
 ⭐ = Implemented from scratch
-🔥🚀🏆🔗🎨📊🌟🕸️🔍👁️📦👯🎮 = Advanced deep learning architectures
+🔥🚀🏆🔗🎨📊🌟🕸️🔍👁️📦👯🎮🔧🛡️🔄 = Advanced deep learning architectures & training techniques
 
 ## Learning Paths
 
@@ -798,6 +927,16 @@ rust-ml-dl/
 19. **19-vae** - Probabilistic generative models
 20. **20-diffusion** - State-of-the-art generation (Stable Diffusion, DALL-E)
 21. **21-gnn** - Graph neural networks & non-Euclidean data
+22. **22-attention** - Attention mechanisms powering Transformers
+23. **23-vision-transformer** - Pure Transformer for vision
+24. **24-object-detection** - Real-time object detection (YOLO)
+25. **25-siamese-networks** - Similarity learning & metric learning
+26. **26-reinforcement-learning** - Deep Q-Networks & RL
+
+### ⚡ Essential Training Techniques
+27. **27-normalization** - BatchNorm, LayerNorm (enables deep networks)
+28. **28-regularization** - Dropout, L1/L2 (prevents overfitting)
+29. **29-transfer-learning** - Fine-tuning pre-trained models (most practical!)
 
 ## Libraries Used
 
@@ -860,11 +999,11 @@ cargo build --workspace
 ## What's New in This Version
 
 ### 🎯 Comprehensive Coverage
-- Examples now numbered 01-21 covering the entire ML/DL landscape
-- Clear progression: Fundamentals → Traditional ML → Deep Learning → State-of-the-Art
-- Three learning tracks: Beginner 🟢 → Advanced 🔴 → Expert 🟣
+- **29 examples** covering the entire ML/DL landscape from fundamentals to production
+- Clear progression: Fundamentals → Traditional ML → Deep Learning → State-of-the-Art → Training Techniques
+- Four learning tracks: Beginner 🟢 → Intermediate 🟡 → Advanced 🔴 → Expert 🟣 → Training Techniques ⚡
 
-### 🆕 Eleven Deep Learning Architectures
+### 🆕 Deep Learning Architectures (11 Core + 5 Advanced)
 **Core Architectures:**
 - **CNN**: Convolutional networks for computer vision
 - **RNN**: Recurrent networks for sequences (text, time series)
@@ -875,12 +1014,22 @@ cargo build --workspace
 - **Transformer**: Attention mechanisms powering GPT, BERT, ChatGPT
 - **ResNet**: Residual networks enabling very deep architectures
 
-**State-of-the-Art Architectures (NEW!):**
+**State-of-the-Art Architectures:**
 - **LSTM/GRU**: Advanced sequence modeling with long-term memory
 - **U-Net**: Semantic segmentation for medical imaging
 - **VAE**: Probabilistic generative models with smooth latent spaces
 - **Diffusion Models**: State-of-the-art generation (Stable Diffusion, DALL-E)
 - **GNN**: Graph neural networks for non-Euclidean data (social networks, molecules)
+- **Attention Mechanisms**: Query-Key-Value framework, foundation of Transformers
+- **Vision Transformer**: Pure Transformer for images, no convolutions
+- **YOLO**: Real-time object detection (45+ FPS)
+- **Siamese Networks**: Similarity learning, one-shot learning, metric learning
+- **Deep Q-Networks**: Reinforcement learning for sequential decisions
+
+### ⚡ Essential Training Techniques (NEW!)
+- **Normalization**: BatchNorm, LayerNorm, GroupNorm, InstanceNorm - enables training deep networks
+- **Regularization**: L1/L2, Dropout, DropConnect, early stopping - prevents overfitting
+- **Transfer Learning**: Fine-tuning pre-trained models - the most practical DL workflow
 
 ### 📖 Enhanced Documentation
 - Each example includes comprehensive theory
@@ -948,11 +1097,20 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 2. **Deep Learning Basics** (09-10): Understand `09-neural-network` from scratch, study `10-deep-learning-basics` theory
 3. **Core Architectures** (11-13): Learn `11-cnn` (vision), `12-rnn` (sequences), `13-autoencoder` (unsupervised)
 4. **Advanced Architectures** (14-16): Master `14-gan` (generation), `15-transformer` (attention), `16-resnet` (very deep networks)
-5. **State-of-the-Art** (17-21):
+5. **State-of-the-Art** (17-26):
    - `17-lstm-gru`: Advanced sequences with memory
    - `18-unet`: Semantic segmentation
    - `19-vae`: Probabilistic generation
    - `20-diffusion`: Modern AI art (Stable Diffusion, DALL-E)
    - `21-gnn`: Graph-structured data (molecules, social networks)
+   - `22-attention`: Attention mechanisms (foundation of Transformers)
+   - `23-vision-transformer`: Transformers for images
+   - `24-object-detection`: Real-time detection (YOLO)
+   - `25-siamese-networks`: Similarity learning
+   - `26-reinforcement-learning`: Deep Q-Networks
+6. **Essential Training Techniques** (27-29):
+   - `27-normalization`: BatchNorm, LayerNorm - enables deep training
+   - `28-regularization`: Dropout, L1/L2 - prevents overfitting
+   - `29-transfer-learning`: Fine-tuning pre-trained models - **most practical!**
 
-Each example builds on previous concepts, so following the numbered order is recommended! The complete path takes you from basics to the cutting edge of AI.
+Each example builds on previous concepts, so following the numbered order is recommended! The complete path takes you from basics to cutting-edge AI and production-ready techniques.

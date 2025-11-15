@@ -1,0 +1,13 @@
+[package]
+name = "transfer-learning"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+
+[[bin]]
+name = "transfer-learning"
+path = "src/main.rs"
+
+[dependencies]
+ndarray = { workspace = true }

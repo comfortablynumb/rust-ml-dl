@@ -27,6 +27,9 @@ members = [
     "examples/24-object-detection",
     "examples/25-siamese-networks",
     "examples/26-reinforcement-learning",
+    "examples/27-normalization",
+    "examples/28-regularization",
+    "examples/29-transfer-learning",
 ]
 
 [workspace.package]
