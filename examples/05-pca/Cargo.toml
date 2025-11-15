@@ -1,0 +1,12 @@
+[package]
+name = "pca"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+ndarray = { workspace = true }
+ndarray-rand = { workspace = true }
+rand = { workspace = true }
+linfa = { workspace = true }
+linfa-reduction = { workspace = true }
+anyhow = { workspace = true }

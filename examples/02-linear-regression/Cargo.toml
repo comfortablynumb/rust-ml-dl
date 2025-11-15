@@ -1,0 +1,12 @@
+[package]
+name = "linear-regression"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+ndarray = { workspace = true }
+ndarray-rand = { workspace = true }
+rand = { workspace = true }
+linfa = { workspace = true }
+linfa-linear = { workspace = true }
+anyhow = { workspace = true }

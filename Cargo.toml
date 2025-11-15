@@ -1,0 +1,41 @@
+[workspace]
+resolver = "2"
+members = [
+    "examples/01-data-preprocessing",
+    "examples/02-linear-regression",
+    "examples/03-logistic-regression",
+    "examples/04-k-means-clustering",
+    "examples/05-pca",
+    "examples/06-decision-trees",
+    "examples/07-svm",
+    "examples/08-gradient-descent",
+    "examples/09-neural-network",
+    "examples/10-deep-learning-basics",
+    "examples/11-cnn",
+    "examples/12-rnn",
+    "examples/13-autoencoder",
+    "examples/14-gan",
+    "examples/15-transformer",
+    "examples/16-resnet",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+authors = ["Rust ML/DL Contributors"]
+license = "MIT"
+
+[workspace.dependencies]
+ndarray = "0.15"
+ndarray-rand = "0.14"
+rand = "0.8"
+linfa = "0.7"
+linfa-linear = "0.7"
+linfa-logistic = "0.7"
+linfa-clustering = "0.7"
+linfa-trees = "0.7"
+linfa-svm = "0.7"
+linfa-reduction = "0.7"
+csv = "1.3"
+serde = { version = "1.0", features = ["derive"] }
+anyhow = "1.0"
