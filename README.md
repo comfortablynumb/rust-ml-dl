@@ -1,6 +1,6 @@
 # Rust Machine Learning & Deep Learning Examples
 
-A comprehensive collection of **29 fully documented machine learning and deep learning examples** implemented in Rust, covering the complete spectrum from fundamentals to cutting-edge AI architectures.
+A comprehensive collection of **33 fully documented machine learning and deep learning examples** implemented in Rust, covering the complete spectrum from fundamentals to cutting-edge AI architectures.
 
 ## Overview
 
@@ -856,6 +856,269 @@ Stage 2: Unfreeze all, small LR (10-20 epochs)
 
 ---
 
+## Advanced Architectures & Techniques
+
+### 30. Sequence-to-Sequence Models (Seq2Seq) 💬
+**Path:** `examples/30-seq2seq`
+**Run:** `cargo run --package seq2seq`
+
+Encoder-decoder architecture for variable-length sequence transformation, revolutionized neural machine translation.
+
+**Core Architecture:**
+- **Encoder**: Compresses input sequence into context
+- **Attention**: Decoder "looks back" at all encoder states
+- **Decoder**: Generates output sequence token-by-token
+
+**Key Innovation: Attention Mechanism (2015)**
+```
+Without attention: Bottleneck (single context vector)
+With attention: Decoder accesses all encoder states
+Result: +10-20 BLEU points on translation
+```
+
+**Decoding Strategies:**
+- **Greedy**: Pick highest-probability word (fast, suboptimal)
+- **Beam Search**: Keep top-k hypotheses (better quality)
+- **Sampling**: Creative generation (chat, stories)
+
+**Training: Teacher Forcing**
+```
+Use ground truth (not predictions) as next input
+Prevents error compounding during training
+```
+
+**Applications:**
+- Machine translation (English → French)
+- Text summarization (article → summary)
+- Dialogue/chatbots (question → answer)
+- Image captioning (image → description)
+- Speech recognition (audio → text)
+
+**Evolution:** Seq2Seq (2014) → +Attention (2015) → Transformer (2017)
+
+**Modern Context**: Largely replaced by Transformers for NLP, but still used for streaming tasks and resource-constrained deployment
+
+---
+
+### 31. Mixture of Experts (MoE) 🧠
+**Path:** `examples/31-mixture-of-experts`
+**Run:** `cargo run --package mixture-of-experts`
+
+**Sparse activation architecture enabling trillion-parameter models** - used in GPT-4, Switch Transformer, and other modern large models.
+
+**Problem Solved:**
+```
+Dense model: 10B params = 10B FLOPs per token
+MoE model: 100B params, but only 10B activated per token
+Result: 10× bigger model with same compute!
+```
+
+**Architecture:**
+```
+Input → Router (which experts?) → Top-k Experts → Weighted Combination
+```
+
+**Routing Strategies:**
+- **Top-1** (Switch): Single expert (fastest)
+- **Top-2**: Balance capacity vs efficiency (common)
+- **Top-k**: More experts for complex inputs
+
+**Expert Specialization** (emergent during training):
+```
+Expert 1: Punctuation and grammar
+Expert 2: Named entities (people, places)
+Expert 3: Numbers and dates
+Expert 4: Technical/scientific terms
+Expert 5: Common words
+Expert 6: Rare words
+```
+
+**Load Balancing:**
+- Auxiliary loss encourages uniform distribution
+- Capacity limits prevent overloading
+- Random routing ensures all experts trained
+
+**Famous MoE Models:**
+- **Switch Transformer** (Google, 1.6T params): 7× speedup over T5-XXL
+- **GLaM** (Google, 1.2T params): Beats GPT-3 with 1/3 energy
+- **GPT-4** (OpenAI, rumored ~1.8T params): 8 experts
+- **Mixtral 8x7B** (Mistral, 47B params): Open-source, beats GPT-3.5
+
+**Scaling:**
+```
+Dense GPT-3: 175B params, 175B FLOPs
+MoE Switch: 1.6T params, ~200B FLOPs (same compute!)
+```
+
+**Impact:** Enables trillion-scale models, likely standard for future large models
+
+---
+
+### 32. Meta-Learning: "Learning to Learn" 🎓
+**Path:** `examples/32-meta-learning`
+**Run:** `cargo run --package meta-learning`
+
+Fast adaptation to new tasks with minimal examples, mimicking human learning.
+
+**Problem:**
+```
+Traditional ML: New task → Need 1000s of examples
+Human learning: See 1-5 examples → Generalize
+Meta-learning: Train on task distribution → Adapt with 1-10 examples!
+```
+
+**N-way K-shot Classification:**
+```
+5-way 1-shot: 5 classes, 1 example per class (5 total examples)
+Classify new examples into one of 5 classes
+```
+
+**Core Concept:**
+```
+Meta-Train: Learn on tasks T₁, T₂, ..., Tₙ
+Meta-Test: New task → Adapt quickly
+Key: Learn "how to learn" rather than specific task
+```
+
+**Major Approaches:**
+
+**1. Prototypical Networks (Metric Learning)**
+```
+1. Embed support examples
+2. Compute class prototypes (mean per class)
+3. Classify query by nearest prototype
+```
+
+**2. MAML (Optimization-Based)**
+```
+Learn initialization θ for fast fine-tuning
+One gradient step adapts to new task
+Second-order optimization through adaptation
+```
+
+**3. Matching Networks (Attention-Based)**
+```
+Attention over support set
+Weighted vote for classification
+Differentiable nearest neighbor
+```
+
+**Benchmarks:**
+- **Omniglot**: 1,623 characters, "MNIST of few-shot learning"
+- **Mini-ImageNet**: 100 classes, standard benchmark
+- Performance: 60-85% (5-way 1-shot), vs 20% random
+
+**Applications:**
+- Drug discovery (few examples of effective compounds)
+- Medical diagnosis (rare diseases, few training examples)
+- Robotics (fast task adaptation with 10-20 demonstrations)
+- Personalization (cold-start users, few ratings)
+- Low-resource NLP (few parallel sentences)
+
+**vs Transfer Learning:**
+```
+Transfer: Single task → Fine-tune on new task (100s examples)
+Meta: Task distribution → Adapt to new task (1-10 examples)
+```
+
+**Modern:** In-context learning in GPT-3/GPT-4 is form of meta-learning
+
+**Impact:** Enables human-like rapid learning from few examples
+
+---
+
+### 33. Neural Architecture Search (NAS) 🔍
+**Path:** `examples/33-neural-architecture-search`
+**Run:** `cargo run --package neural-architecture-search`
+
+**AutoML for automatically discovering optimal neural architectures** - often finds better designs than human experts.
+
+**Problem:**
+```
+Manual design: Expert trial-and-error, months/years
+NAS: Automated search, systematic exploration
+Result: Often beats human designs!
+```
+
+**Three Components:**
+
+**1. Search Space** (What architectures to consider)
+```
+Operations: Conv3x3, Conv5x5, MaxPool, Identity
+Connections: Skip, sequential
+Depth: 10-50 layers
+
+Cell-based: Design reusable "cell", stack to form network
+```
+
+**2. Search Strategy** (How to explore)
+```
+• Random search (surprisingly effective baseline)
+• Reinforcement learning (NASNet)
+• Evolutionary algorithms (mutation, crossover)
+• Gradient-based (DARTS) - differentiable search!
+```
+
+**3. Performance Estimation** (How to evaluate)
+```
+• Full training (accurate, expensive)
+• Low fidelity (few epochs, faster)
+• Weight sharing (one-shot NAS)
+• Predictors (learned performance models)
+```
+
+**Famous Results:**
+
+**NASNet (Google, 2017)**
+```
+Method: RL-based search
+Cost: 800 GPU days
+Result: Beat human designs on ImageNet
+Transfer: NASNet cells used in detection, segmentation
+```
+
+**DARTS (2018)**
+```
+Method: Gradient-based (differentiable)
+Cost: 4 GPU days (200× faster than NASNet!)
+Result: Competitive performance
+Impact: Simple, reproducible, widely adopted
+```
+
+**EfficientNet (Google, 2019)**
+```
+Method: NAS + compound scaling
+Result: SOTA ImageNet (84.3% top-1)
+Efficiency: Fewer params than previous SOTA
+```
+
+**Discovered Patterns:**
+- Depthwise separable convolutions (now widely used)
+- Skip connections (validates ResNet)
+- Irregular patterns (no human bias for symmetry)
+
+**Variations:**
+- **Hardware-aware NAS**: Optimize latency, energy (MobileNetV3)
+- **Transferable NAS**: Search on CIFAR-10, transfer to ImageNet
+- **Once-for-all**: Single network → multiple configurations
+
+**When to Use:**
+```
+✅ Significant compute (10+ GPUs)
+✅ Need SOTA performance
+✅ Specific constraints (mobile, edge)
+
+❌ Limited resources (<10 GPUs)
+❌ Well-solved problem (use existing)
+❌ Quick prototype needed
+```
+
+**Future:** Essential AutoML tool, democratizes deep learning for non-experts
+
+**Impact:** Transforms architecture design from manual art to automated science
+
+---
+
 ## Project Structure
 
 ```
@@ -891,11 +1154,15 @@ rust-ml-dl/
     ├── 26-reinforcement-learning/ # RL & DQN 🎮
     ├── 27-normalization/         # Training Techniques: Normalization 🔧
     ├── 28-regularization/        # Training Techniques: Regularization 🛡️
-    └── 29-transfer-learning/     # Training Techniques: Transfer Learning 🔄
+    ├── 29-transfer-learning/     # Training Techniques: Transfer Learning 🔄
+    ├── 30-seq2seq/               # Advanced: Seq2Seq Translation 💬
+    ├── 31-mixture-of-experts/    # Advanced: MoE (Trillion-scale) 🧠
+    ├── 32-meta-learning/         # Advanced: Learning to Learn 🎓
+    └── 33-neural-architecture-search/ # Advanced: AutoML/NAS 🔍
 ```
 
 ⭐ = Implemented from scratch
-🔥🚀🏆🔗🎨📊🌟🕸️🔍👁️📦👯🎮🔧🛡️🔄 = Advanced deep learning architectures & training techniques
+🔥🚀🏆🔗🎨📊🌟🕸️🔍👁️📦👯🎮🔧🛡️🔄💬🧠🎓🔍 = Advanced deep learning architectures & training techniques
 
 ## Learning Paths
 
@@ -937,6 +1204,12 @@ rust-ml-dl/
 27. **27-normalization** - BatchNorm, LayerNorm (enables deep networks)
 28. **28-regularization** - Dropout, L1/L2 (prevents overfitting)
 29. **29-transfer-learning** - Fine-tuning pre-trained models (most practical!)
+
+### 🚀 Advanced Modern Techniques
+30. **30-seq2seq** - Encoder-decoder + attention (machine translation)
+31. **31-mixture-of-experts** - Sparse activation, trillion-scale models (GPT-4)
+32. **32-meta-learning** - Learning to learn, few-shot adaptation (MAML)
+33. **33-neural-architecture-search** - AutoML, automated architecture discovery (NAS)
 
 ## Libraries Used
 
@@ -999,9 +1272,9 @@ cargo build --workspace
 ## What's New in This Version
 
 ### 🎯 Comprehensive Coverage
-- **29 examples** covering the entire ML/DL landscape from fundamentals to production
-- Clear progression: Fundamentals → Traditional ML → Deep Learning → State-of-the-Art → Training Techniques
-- Four learning tracks: Beginner 🟢 → Intermediate 🟡 → Advanced 🔴 → Expert 🟣 → Training Techniques ⚡
+- **33 examples** covering the entire ML/DL landscape from fundamentals to cutting-edge production techniques
+- Clear progression: Fundamentals → Traditional ML → Deep Learning → State-of-the-Art → Training Techniques → Advanced Modern
+- Five learning tracks: Beginner 🟢 → Intermediate 🟡 → Advanced 🔴 → Expert 🟣 → Training Techniques ⚡ → Advanced Modern 🚀
 
 ### 🆕 Deep Learning Architectures (11 Core + 5 Advanced)
 **Core Architectures:**
@@ -1026,10 +1299,16 @@ cargo build --workspace
 - **Siamese Networks**: Similarity learning, one-shot learning, metric learning
 - **Deep Q-Networks**: Reinforcement learning for sequential decisions
 
-### ⚡ Essential Training Techniques (NEW!)
+### ⚡ Essential Training Techniques
 - **Normalization**: BatchNorm, LayerNorm, GroupNorm, InstanceNorm - enables training deep networks
 - **Regularization**: L1/L2, Dropout, DropConnect, early stopping - prevents overfitting
 - **Transfer Learning**: Fine-tuning pre-trained models - the most practical DL workflow
+
+### 🚀 Advanced Modern Techniques (NEW!)
+- **Seq2Seq Models**: Encoder-decoder + attention for translation, summarization, dialogue
+- **Mixture of Experts**: Sparse activation enabling trillion-parameter models (GPT-4, Switch Transformer)
+- **Meta-Learning**: "Learning to learn" - rapid adaptation with 1-10 examples (MAML, Prototypical Networks)
+- **Neural Architecture Search**: AutoML for discovering optimal architectures (NASNet, DARTS, EfficientNet)
 
 ### 📖 Enhanced Documentation
 - Each example includes comprehensive theory
@@ -1112,5 +1391,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
    - `27-normalization`: BatchNorm, LayerNorm - enables deep training
    - `28-regularization`: Dropout, L1/L2 - prevents overfitting
    - `29-transfer-learning`: Fine-tuning pre-trained models - **most practical!**
+7. **Advanced Modern Techniques** (30-33):
+   - `30-seq2seq`: Encoder-decoder + attention for translation
+   - `31-mixture-of-experts`: Sparse activation, trillion-scale models (GPT-4 architecture)
+   - `32-meta-learning`: Learning to learn, few-shot adaptation
+   - `33-neural-architecture-search`: AutoML, automated architecture discovery
 
-Each example builds on previous concepts, so following the numbered order is recommended! The complete path takes you from basics to cutting-edge AI and production-ready techniques.
+Each example builds on previous concepts, so following the numbered order is recommended! The complete path takes you from basics to cutting-edge AI, production techniques, and the future of deep learning.

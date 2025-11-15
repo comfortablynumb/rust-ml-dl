@@ -30,6 +30,10 @@ members = [
     "examples/27-normalization",
     "examples/28-regularization",
     "examples/29-transfer-learning",
+    "examples/30-seq2seq",
+    "examples/31-mixture-of-experts",
+    "examples/32-meta-learning",
+    "examples/33-neural-architecture-search",
 ]
 
 [workspace.package]
