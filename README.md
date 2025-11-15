@@ -1,6 +1,6 @@
 # Rust Machine Learning & Deep Learning Examples
 
-A comprehensive collection of **36 fully documented machine learning and deep learning examples** implemented in Rust, covering the complete spectrum from fundamentals to cutting-edge AI architectures.
+A comprehensive collection of **40 fully documented machine learning and deep learning examples** implemented in Rust, covering the complete spectrum from fundamentals to cutting-edge AI architectures.
 
 ## Overview
 
@@ -1279,6 +1279,211 @@ Identify unusual patterns that differ from the majority of the data - critical f
 
 ---
 
+## Deep Learning Optimization & Self-Supervised Learning
+
+### 37. Advanced Optimizers 🚀
+**Path:** `examples/37-advanced-optimizers`
+**Run:** `cargo run --package advanced-optimizers`
+
+Modern optimization algorithms that power all deep learning: Adam, RMSprop, AdaGrad, and learning rate scheduling.
+
+**Optimizers:**
+- **SGD + Momentum**: Accelerated gradient descent with velocity
+- **AdaGrad**: Adaptive learning rates for sparse features
+- **RMSprop**: Exponential moving average of squared gradients (great for RNNs!)
+- **Adam**: Combines momentum + RMSprop (**most popular optimizer**)
+- **AdamW**: Adam with decoupled weight decay (Transformer default)
+
+**Learning Rate Schedules:**
+- **Step Decay**: Reduce LR every N epochs
+- **Exponential Decay**: Smooth decay by constant factor
+- **Cosine Annealing**: Follow cosine curve (modern default)
+- **Warmup + Cosine**: Linear warmup then cosine decay (**BERT, GPT standard**)
+
+**Additional Techniques:**
+- **Gradient Clipping**: Prevent exploding gradients (required for RNNs!)
+- **Gradient Accumulation**: Simulate larger batch size
+
+**Why Modern Optimizers Matter:**
+- 10-100× faster convergence than basic SGD
+- Adaptive learning rates per parameter
+- Enable training of very deep networks (100+ layers)
+- Power all modern AI (GPT, BERT, Stable Diffusion)
+
+**Production Settings:**
+- Transformers: AdamW, lr=1e-4, warmup+cosine
+- ResNets: SGD+momentum, lr=0.1, cosine
+- RNNs: Adam, lr=0.001, gradient clipping=1.0
+
+**Impact:** Enabled the deep learning revolution - modern optimizers make training practical
+
+---
+
+### 38. Model Compression & Deployment 📦
+**Path:** `examples/38-model-compression`
+**Run:** `cargo run --package model-compression`
+
+Making deep learning production-ready: compress models by 10-100× for deployment to mobile, edge, and resource-constrained environments.
+
+**Compression Techniques:**
+
+**1. Pruning** (Remove unnecessary weights)
+- **Unstructured**: Remove individual weights (90% sparsity possible!)
+- **Structured**: Remove entire channels/filters (real speedup)
+- **Iterative Magnitude Pruning**: Prune → fine-tune → repeat
+- Results: 90% pruning with <1% accuracy loss
+
+**2. Quantization** (Reduce precision)
+- **FP32 → INT8**: 4× smaller, 2-4× faster, <1% loss
+- **INT4**: 8× smaller, 2-5% loss
+- **Post-Training Quantization**: No retraining needed
+- **Quantization-Aware Training**: Better accuracy
+
+**3. Knowledge Distillation** (Teacher-Student)
+- Train small student to mimic large teacher
+- Soft targets reveal relative confidences
+- 10-24× compression with 95-97% accuracy
+- Famous: BERT → DistilBERT (1.6×), TinyBERT (24×)
+
+**Real-World Examples:**
+- BERT (110M) → DistilBERT (66M): 1.6× smaller, 97% accuracy
+- GPT-2 (1.5B) → DistilGPT-2 (82M): 18× smaller
+- ResNet-152 → ResNet-18: 8.4× smaller via distillation
+
+**Deployment:**
+- **Mobile**: TensorFlow Lite, Core ML (INT8)
+- **Edge**: ONNX Runtime (pruning + INT8)
+- **GPU**: TensorRT (FP16/INT8 mixed precision)
+
+**Best Quick Win:** Post-training INT8 quantization - 4× smaller, 2-4× faster, <1% loss, no retraining!
+
+**Impact:** Enables on-device AI, reduces cloud costs by 10×, essential for production deployment
+
+---
+
+### 39. Contrastive Learning 🔥
+**Path:** `examples/39-contrastive-learning`
+**Run:** `cargo run --package contrastive-learning`
+
+Revolutionary self-supervised learning: learn visual representations without labels by contrasting similar and dissimilar examples. Foundation of CLIP, Stable Diffusion, and modern AI.
+
+**Core Idea:**
+```
+Similar things → Close in embedding space
+Different things → Far apart
+Two views of same image = positive pair
+Views from different images = negative pairs
+```
+
+**Major Approaches:**
+
+**1. SimCLR** (Google, 2020)
+- Create 2 augmented views of each image
+- NT-Xent contrastive loss
+- Large batch sizes (256-8192)
+- ImageNet: 76.5% accuracy with NO labels!
+
+**2. MoCo** (Facebook, 2020)
+- Momentum queue + momentum encoder
+- 65K negatives without large batch
+- Memory-efficient alternative to SimCLR
+- 76.7% ImageNet (8× smaller batch than SimCLR)
+
+**3. BYOL** (DeepMind, 2020)
+- Revolutionary: NO negative pairs needed!
+- Asymmetric architecture + momentum
+- 79.6% ImageNet (beats SimCLR, MoCo)
+
+**4. CLIP** (OpenAI, 2021) - **Most Impactful**
+- Joint vision-language learning
+- 400M (image, text) pairs
+- **Zero-shot classification: 76.2%** (no fine-tuning!)
+- Powers Stable Diffusion, DALL-E prompts
+
+**Why It Works:**
+- Learn from billions of unlabeled images (free!)
+- Better representations than supervised learning
+- Transfers to any task with few examples
+
+**Applications:**
+- Pre-training for computer vision
+- Few-shot learning (80%+ with 5-10 examples)
+- Medical imaging (limited labels)
+- Text-to-image generation (CLIP → Stable Diffusion)
+
+**Results:**
+- Matches supervised ImageNet with 1% of labels
+- Better transfer learning than supervised
+- CLIP enables zero-shot on ANY image task
+
+**Impact:** The paradigm shift - supervised learning → self-supervised pre-training + fine-tuning. Powers the AI art revolution (Stable Diffusion, DALL-E).
+
+---
+
+### 40. Masked Modeling 🎭
+**Path:** `examples/40-masked-modeling`
+**Run:** `cargo run --package masked-modeling`
+
+Self-supervised learning through masked prediction: Learn by reconstructing masked portions of input. Foundation of BERT, GPT, and Masked Autoencoders.
+
+**Core Idea:** Learn by filling in the blanks
+```
+Text: "The [MASK] sat on the [MASK]"
+Task: Predict masked words
+Answer: "The cat sat on the mat"
+```
+
+**Major Approaches:**
+
+**1. BERT** (Google, 2018) - **NLP Revolution**
+- Mask 15% of tokens randomly
+- Predict using bidirectional Transformer
+- Pre-train on Wikipedia (3.3B words, unlabeled)
+- Results: GLUE 80.5% (vs 72.8% pre-BERT)
+- Impact: Transformed NLP, Google Search uses BERT
+
+**2. RoBERTa** (Facebook, 2019)
+- Optimized BERT training
+- More data (160GB text), longer training
+- GLUE: 88.5% (vs BERT: 80.5%)
+
+**3. MAE** (Facebook, 2021) - **Vision Masked Modeling**
+- BERT for images
+- Mask 75% of patches (very high!)
+- Asymmetric encoder-decoder
+- ImageNet: 87.8% (SOTA for ViT)
+- 3× faster than contrastive learning
+
+**4. GPT** (OpenAI) - **Autoregressive Masking**
+- Predict next token (causal masking)
+- GPT-1 (117M) → GPT-3 (175B) → GPT-4 (~1.7T)
+- Foundation of ChatGPT
+
+**Why It Works:**
+- Forces understanding of context
+- Learns from billions of unlabeled examples
+- Bidirectional (BERT/MAE) learns from both sides
+- Scales with data and compute
+
+**Masking Ratios:**
+- NLP (BERT): 15% - text has low redundancy
+- Vision (MAE): 75% - images have high redundancy
+- Higher masking → harder task → deeper understanding
+
+**Applications:**
+- Transfer learning (10-100× less labeled data)
+- Few-shot learning (pre-train on millions → fine-tune on 100s)
+- Zero-shot (GPT-3 prompt engineering)
+
+**Famous Models:**
+- BERT (110M): Google Search, NLP understanding
+- GPT-3 (175B): ChatGPT, text generation
+- MAE: Vision Transformer pre-training
+
+**Impact:** The paradigm shift - task-specific training → masked pre-training + fine-tuning. Enabled GPT-3, BERT, and modern foundation models.
+
+---
+
 ## Project Structure
 
 ```
@@ -1321,7 +1526,11 @@ rust-ml-dl/
     ├── 33-neural-architecture-search/ # Advanced: AutoML/NAS 🔍
     ├── 34-time-series-forecasting/ # Practical ML: Time Series 📈
     ├── 35-recommendation-systems/ # Practical ML: Recommendations ⭐
-    └── 36-anomaly-detection/     # Practical ML: Anomaly Detection 🚨
+    ├── 36-anomaly-detection/     # Practical ML: Anomaly Detection 🚨
+    ├── 37-advanced-optimizers/   # Optimization: Adam, RMSprop, Schedules 🚀
+    ├── 38-model-compression/     # Deployment: Pruning, Quantization, Distillation 📦
+    ├── 39-contrastive-learning/  # Self-Supervised: SimCLR, MoCo, CLIP 🔥
+    └── 40-masked-modeling/       # Self-Supervised: BERT, GPT, MAE 🎭
 ```
 
 ⭐ = Implemented from scratch
@@ -1435,9 +1644,9 @@ cargo build --workspace
 ## What's New in This Version
 
 ### 🎯 Comprehensive Coverage
-- **36 examples** covering the entire ML/DL landscape from fundamentals to cutting-edge production techniques
-- Clear progression: Fundamentals → Traditional ML → Deep Learning → State-of-the-Art → Training Techniques → Advanced Modern → Practical Applications
-- Six learning tracks: Beginner 🟢 → Intermediate 🟡 → Advanced 🔴 → Expert 🟣 → Training Techniques ⚡ → Advanced Modern 🚀 → Practical ML 📊
+- **40 examples** covering the entire ML/DL landscape from fundamentals to cutting-edge production techniques
+- Clear progression: Fundamentals → Traditional ML → Deep Learning → State-of-the-Art → Training Techniques → Advanced Modern → Practical Applications → Optimization & Self-Supervised
+- Seven learning tracks: Beginner 🟢 → Intermediate 🟡 → Advanced 🔴 → Expert 🟣 → Training Techniques ⚡ → Advanced Modern 🚀 → Practical ML 📊 → Modern AI 🔥
 
 ### 🆕 Deep Learning Architectures (11 Core + 5 Advanced)
 **Core Architectures:**
@@ -1473,10 +1682,16 @@ cargo build --workspace
 - **Meta-Learning**: "Learning to learn" - rapid adaptation with 1-10 examples (MAML, Prototypical Networks)
 - **Neural Architecture Search**: AutoML for discovering optimal architectures (NASNet, DARTS, EfficientNet)
 
-### 📊 Practical Machine Learning Applications (NEW!)
+### 📊 Practical Machine Learning Applications
 - **Time Series Forecasting**: ARIMA, Prophet, LSTM for sequential predictions (stock prices, weather, sales)
 - **Recommendation Systems**: Collaborative filtering, matrix factorization, neural CF (YouTube, Netflix, Amazon-style)
 - **Anomaly Detection**: Isolation Forest, autoencoders, One-Class SVM for fraud and system monitoring
+
+### 🔥 Deep Learning Optimization & Self-Supervised Learning (NEW!)
+- **Advanced Optimizers**: Adam, AdamW, RMSprop, learning rate schedules (warmup+cosine for Transformers)
+- **Model Compression**: Pruning (90% reduction), quantization (INT8), distillation (10-24× smaller)
+- **Contrastive Learning**: SimCLR, MoCo, BYOL, CLIP - learn from unlabeled data, powers Stable Diffusion
+- **Masked Modeling**: BERT, GPT, MAE - foundation of ChatGPT and modern NLP/vision
 
 ### 📖 Enhanced Documentation
 - Each example includes comprehensive theory
@@ -1568,5 +1783,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
    - `34-time-series-forecasting`: ARIMA, Prophet, LSTM for sequential data (stocks, weather, sales)
    - `35-recommendation-systems`: Collaborative filtering, matrix factorization (YouTube, Netflix, Amazon)
    - `36-anomaly-detection`: Isolation Forest, autoencoders, One-Class SVM (fraud, monitoring)
+9. **Modern Deep Learning: Optimization & Self-Supervised** (37-40):
+   - `37-advanced-optimizers`: Adam, AdamW, learning rate schedules (warmup+cosine) - **powers all modern training**
+   - `38-model-compression`: Pruning, quantization, distillation - **production deployment essential**
+   - `39-contrastive-learning`: SimCLR, MoCo, CLIP - **learn from unlabeled data, powers Stable Diffusion**
+   - `40-masked-modeling`: BERT, GPT, MAE - **foundation of ChatGPT and modern NLP/vision**
 
-Each example builds on previous concepts, so following the numbered order is recommended! The complete path takes you from basics to cutting-edge AI, production techniques, practical applications, and the future of deep learning.
+Each example builds on previous concepts, so following the numbered order is recommended! The complete path takes you from basics to cutting-edge AI, production techniques, practical applications, modern optimization, and self-supervised learning - the future of AI.

@@ -37,6 +37,10 @@ members = [
     "examples/34-time-series-forecasting",
     "examples/35-recommendation-systems",
     "examples/36-anomaly-detection",
+    "examples/37-advanced-optimizers",
+    "examples/38-model-compression",
+    "examples/39-contrastive-learning",
+    "examples/40-masked-modeling",
 ]
 
 [workspace.package]
