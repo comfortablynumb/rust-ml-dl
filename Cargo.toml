@@ -44,6 +44,11 @@ members = [
     "examples/41-efficient-transformers",
     "examples/42-diffusion-applications",
     "examples/43-neural-odes",
+    "examples/44-explainability-gradcam",
+    "examples/45-text-classification",
+    "examples/46-data-augmentation",
+    "examples/47-policy-gradient-ppo",
+    "examples/48-neural-style-transfer",
 ]
 
 [workspace.package]
