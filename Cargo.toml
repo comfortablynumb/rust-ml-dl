@@ -34,6 +34,9 @@ members = [
     "examples/31-mixture-of-experts",
     "examples/32-meta-learning",
     "examples/33-neural-architecture-search",
+    "examples/34-time-series-forecasting",
+    "examples/35-recommendation-systems",
+    "examples/36-anomaly-detection",
 ]
 
 [workspace.package]

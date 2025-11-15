@@ -14,6 +14,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "anomaly-detection"
+version = "0.1.0"
+dependencies = [
+ "ndarray",
+ "rand",
+]
+
+[[package]]
 name = "anyhow"
 version = "1.0.100"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -751,6 +759,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "recommendation-systems"
+version = "0.1.0"
+dependencies = [
+ "ndarray",
+ "rand",
+]
+
+[[package]]
 name = "regularization"
 version = "0.1.0"
 dependencies = [
@@ -869,6 +885,14 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn",
+]
+
+[[package]]
+name = "time-series-forecasting"
+version = "0.1.0"
+dependencies = [
+ "ndarray",
+ "rand",
 ]
 
 [[package]]

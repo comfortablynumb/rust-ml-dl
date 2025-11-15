@@ -1,6 +1,6 @@
 # Rust Machine Learning & Deep Learning Examples
 
-A comprehensive collection of **33 fully documented machine learning and deep learning examples** implemented in Rust, covering the complete spectrum from fundamentals to cutting-edge AI architectures.
+A comprehensive collection of **36 fully documented machine learning and deep learning examples** implemented in Rust, covering the complete spectrum from fundamentals to cutting-edge AI architectures.
 
 ## Overview
 
@@ -1119,6 +1119,166 @@ Efficiency: Fewer params than previous SOTA
 
 ---
 
+## Practical Machine Learning Applications
+
+### 34. Time Series Forecasting 📈
+**Path:** `examples/34-time-series-forecasting`
+**Run:** `cargo run --package time-series-forecasting`
+
+Predicting future values based on historical patterns in sequential data.
+
+**Core Concepts:**
+- Time series components (trend, seasonality, cycles, noise)
+- Stationarity and differencing
+- Moving averages and exponential smoothing
+- AutoRegressive (AR) models
+
+**Classical Methods:**
+- **ARIMA/SARIMA**: Statistical models for univariate time series
+- **Prophet** (Facebook): Additive model with trend, seasonality, holidays
+- **Exponential Smoothing**: Weighted averages with recent emphasis
+
+**Deep Learning:**
+- **LSTM/GRU**: Capture long-term dependencies in sequences
+- **Seq2Seq**: Multi-step ahead forecasting
+- **Attention-based**: Focus on relevant historical periods
+
+**Feature Engineering:**
+- Lag features (previous values)
+- Rolling statistics (moving avg, std)
+- Date features (day of week, month, seasonality)
+- Cyclical encoding (sin/cos for periodic patterns)
+
+**Evaluation:**
+- MAE, RMSE, MAPE, SMAPE
+- Time-based cross-validation (walk-forward)
+
+**Applications:**
+- **Finance**: Stock prices, portfolio optimization, risk management
+- **Retail**: Demand forecasting, inventory optimization, sales planning
+- **Energy**: Electricity demand, renewable energy prediction, grid management
+- **Weather**: Temperature, precipitation, extreme events
+- **Operations**: Website traffic, server load, capacity planning
+
+**Modern Context:** Essential for business planning and operations; combines classical statistical methods with deep learning for complex patterns
+
+---
+
+### 35. Recommendation Systems ⭐
+**Path:** `examples/35-recommendation-systems`
+**Run:** `cargo run --package recommendation-systems`
+
+Predict user preferences and suggest relevant items to enhance user experience and engagement.
+
+**Core Approaches:**
+
+**1. Collaborative Filtering**
+- **User-based**: Find similar users → recommend what they liked
+- **Item-based**: Find similar items → recommend those (Amazon uses this)
+- **Similarity metrics**: Cosine, Pearson correlation, Jaccard
+
+**2. Matrix Factorization**
+- Decompose ratings matrix: `R ≈ U × I^T`
+- Learn latent factors (50-200 dimensions)
+- **Training**: SVD, ALS (parallelizable), SGD
+- Add biases: `r̂ = μ + b_user + b_item + user·item`
+
+**3. Neural Collaborative Filtering**
+- Replace dot product with neural network
+- Learn non-linear user-item interactions
+- **NeuMF**: Combines GMF + MLP paths
+
+**Evaluation:**
+- Prediction: RMSE, MAE
+- Ranking: Precision@K, Recall@K, NDCG
+- Beyond accuracy: Diversity, serendipity, coverage, fairness
+
+**Cold Start Solutions:**
+- Content-based filtering for new items
+- Demographic features for new users
+- Hybrid approaches
+- Ask users to rate initial items
+
+**Real-World Systems:**
+- **YouTube**: Two-stage (candidate generation → ranking), optimizes watch time
+- **Netflix**: Hybrid (collaborative + content + context), personalized thumbnails
+- **Amazon**: Item-based CF, "Customers who bought X also bought Y"
+- **Spotify**: Collaborative + content-based audio features + NLP on playlists
+
+**Applications:** E-commerce, streaming (video/music), social media, news, job matching, ad targeting
+
+**Impact:** Powers modern platforms, drives engagement and revenue, essential for personalization at scale
+
+---
+
+### 36. Anomaly Detection 🚨
+**Path:** `examples/36-anomaly-detection`
+**Run:** `cargo run --package anomaly-detection`
+
+Identify unusual patterns that differ from the majority of the data - critical for fraud detection, system monitoring, and security.
+
+**Anomaly Types:**
+- **Point anomalies**: Single unusual data point ($10,000 charge vs usual $50)
+- **Contextual anomalies**: Unusual in specific context (35°C normal in summer, anomaly in winter)
+- **Collective anomalies**: Collection unusual together (intrusion attack sequence)
+
+**Main Approaches:**
+
+**1. Statistical Methods**
+- **Z-score**: `z = (x - μ) / σ`, flag if |z| > 2.5-3
+- ✅ Simple, fast, interpretable
+- ❌ Assumes Gaussian distribution
+
+**2. Distance-Based (KNN)**
+- Points far from k nearest neighbors are anomalies
+- ✅ No distribution assumption, intuitive
+- ❌ O(n²) computation, sensitive to k
+
+**3. Isolation Forest**
+- **Key insight**: Anomalies easier to isolate (fewer splits)
+- Build ensemble of random isolation trees
+- Short path = anomaly, long path = normal
+- ✅ Fast O(n log n), handles high dimensions, few parameters
+- ❌ Less effective when anomalies cluster
+
+**4. Autoencoder-Based**
+- Train on normal data only
+- Anomalies have high reconstruction error
+- **Threshold**: 95th percentile, μ + 3σ, or domain-based
+- ✅ Learns complex patterns, handles high dimensions, unsupervised
+- ❌ Requires lots of normal data, black box, threshold tuning
+
+**5. One-Class SVM**
+- Learn boundary around normal data
+- Points outside = anomalies
+- **Kernels**: RBF (most common), linear, polynomial
+- ✅ Mathematically well-founded, kernel trick
+- ❌ O(n²-n³) training, kernel selection critical
+
+**Evaluation:**
+- Precision, Recall, F1-score
+- **AUC-PR** (better for imbalanced data than AUC-ROC)
+- Trade-off: False positives vs false negatives
+
+**Applications:**
+- **Fraud detection**: Credit cards, insurance claims, fake accounts (<0.1% fraud rate)
+- **System monitoring**: CPU/memory spikes, network intrusions, DDoS
+- **Manufacturing**: Defective products, equipment failures, quality control
+- **Healthcare**: Disease outbreaks, unusual vitals, medical imaging
+- **Cybersecurity**: Malware, intrusions, user behavior analytics
+
+**Practical Tips:**
+- Feature engineering crucial (domain knowledge)
+- Ensemble methods (combine multiple approaches)
+- Handle concept drift (retrain periodically)
+- Explain detections (build trust)
+
+**Challenges:** Highly imbalanced data (99.9% normal), adversarial adaptation (fraudsters evolve), real-time detection
+
+**Impact:** Essential for security, quality, and system reliability across industries
+
+---
+
 ## Project Structure
 
 ```
@@ -1158,7 +1318,10 @@ rust-ml-dl/
     ├── 30-seq2seq/               # Advanced: Seq2Seq Translation 💬
     ├── 31-mixture-of-experts/    # Advanced: MoE (Trillion-scale) 🧠
     ├── 32-meta-learning/         # Advanced: Learning to Learn 🎓
-    └── 33-neural-architecture-search/ # Advanced: AutoML/NAS 🔍
+    ├── 33-neural-architecture-search/ # Advanced: AutoML/NAS 🔍
+    ├── 34-time-series-forecasting/ # Practical ML: Time Series 📈
+    ├── 35-recommendation-systems/ # Practical ML: Recommendations ⭐
+    └── 36-anomaly-detection/     # Practical ML: Anomaly Detection 🚨
 ```
 
 ⭐ = Implemented from scratch
@@ -1272,9 +1435,9 @@ cargo build --workspace
 ## What's New in This Version
 
 ### 🎯 Comprehensive Coverage
-- **33 examples** covering the entire ML/DL landscape from fundamentals to cutting-edge production techniques
-- Clear progression: Fundamentals → Traditional ML → Deep Learning → State-of-the-Art → Training Techniques → Advanced Modern
-- Five learning tracks: Beginner 🟢 → Intermediate 🟡 → Advanced 🔴 → Expert 🟣 → Training Techniques ⚡ → Advanced Modern 🚀
+- **36 examples** covering the entire ML/DL landscape from fundamentals to cutting-edge production techniques
+- Clear progression: Fundamentals → Traditional ML → Deep Learning → State-of-the-Art → Training Techniques → Advanced Modern → Practical Applications
+- Six learning tracks: Beginner 🟢 → Intermediate 🟡 → Advanced 🔴 → Expert 🟣 → Training Techniques ⚡ → Advanced Modern 🚀 → Practical ML 📊
 
 ### 🆕 Deep Learning Architectures (11 Core + 5 Advanced)
 **Core Architectures:**
@@ -1304,11 +1467,16 @@ cargo build --workspace
 - **Regularization**: L1/L2, Dropout, DropConnect, early stopping - prevents overfitting
 - **Transfer Learning**: Fine-tuning pre-trained models - the most practical DL workflow
 
-### 🚀 Advanced Modern Techniques (NEW!)
+### 🚀 Advanced Modern Techniques
 - **Seq2Seq Models**: Encoder-decoder + attention for translation, summarization, dialogue
 - **Mixture of Experts**: Sparse activation enabling trillion-parameter models (GPT-4, Switch Transformer)
 - **Meta-Learning**: "Learning to learn" - rapid adaptation with 1-10 examples (MAML, Prototypical Networks)
 - **Neural Architecture Search**: AutoML for discovering optimal architectures (NASNet, DARTS, EfficientNet)
+
+### 📊 Practical Machine Learning Applications (NEW!)
+- **Time Series Forecasting**: ARIMA, Prophet, LSTM for sequential predictions (stock prices, weather, sales)
+- **Recommendation Systems**: Collaborative filtering, matrix factorization, neural CF (YouTube, Netflix, Amazon-style)
+- **Anomaly Detection**: Isolation Forest, autoencoders, One-Class SVM for fraud and system monitoring
 
 ### 📖 Enhanced Documentation
 - Each example includes comprehensive theory
@@ -1396,5 +1564,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
    - `31-mixture-of-experts`: Sparse activation, trillion-scale models (GPT-4 architecture)
    - `32-meta-learning`: Learning to learn, few-shot adaptation
    - `33-neural-architecture-search`: AutoML, automated architecture discovery
+8. **Practical Machine Learning Applications** (34-36):
+   - `34-time-series-forecasting`: ARIMA, Prophet, LSTM for sequential data (stocks, weather, sales)
+   - `35-recommendation-systems`: Collaborative filtering, matrix factorization (YouTube, Netflix, Amazon)
+   - `36-anomaly-detection`: Isolation Forest, autoencoders, One-Class SVM (fraud, monitoring)
 
-Each example builds on previous concepts, so following the numbered order is recommended! The complete path takes you from basics to cutting-edge AI, production techniques, and the future of deep learning.
+Each example builds on previous concepts, so following the numbered order is recommended! The complete path takes you from basics to cutting-edge AI, production techniques, practical applications, and the future of deep learning.
