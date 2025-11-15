@@ -1,6 +1,6 @@
 # Rust Machine Learning & Deep Learning Examples
 
-A comprehensive collection of **16 fully documented machine learning and deep learning examples** implemented in Rust, organized in a clear learning progression.
+A comprehensive collection of **21 fully documented machine learning and deep learning examples** implemented in Rust, organized in a clear learning progression from fundamentals to state-of-the-art architectures.
 
 ## Overview
 
@@ -379,6 +379,169 @@ Output = F(x) + x
 
 ---
 
+### 17. LSTM & GRU (Gated Recurrent Units) 🔗
+**Path:** `examples/17-lstm-gru`
+**Run:** `cargo run --package lstm-gru`
+
+The RNN variants that solved the vanishing gradient problem and enabled long-term memory.
+
+**Key Innovation:**
+- LSTM: Explicit memory cell with three gates (forget, input, output)
+- GRU: Simplified variant with two gates (update, reset)
+- Gradient highway through cell state
+
+**How They Work:**
+- **Gates** control information flow (what to remember/forget)
+- **Cell state** (LSTM) provides direct path for gradients
+- **Reparameterization** enables learning 100+ timesteps
+
+**LSTM vs GRU:**
+- LSTM: More parameters, slightly better on complex tasks
+- GRU: 25% faster, similar performance, fewer parameters
+
+**Applications:** Machine translation, speech recognition, time series forecasting, music generation
+
+**Modern Context:** Transformers replaced LSTM/GRU for NLP, but they're still used for streaming data, online processing, resource-constrained settings, and time series
+
+---
+
+### 18. U-Net (Semantic Segmentation) 🎨
+**Path:** `examples/18-unet`
+**Run:** `cargo run --package unet`
+
+The encoder-decoder architecture that revolutionized medical image segmentation with very few training images.
+
+**Key Innovation:**
+- Symmetric encoder-decoder with skip connections
+- Works with < 30 training images (heavy data augmentation)
+- Pixel-wise predictions for segmentation
+
+**Architecture:**
+- **Encoder (contracting path)**: Downsample, extract features
+- **Bottleneck**: Most abstract features
+- **Decoder (expanding path)**: Upsample, recover spatial detail
+- **Skip connections**: Concatenate encoder features to decoder
+
+**Why Skip Connections?:**
+- Encoder provides precise spatial information (where)
+- Bottleneck provides semantic understanding (what)
+- Decoder gets both for accurate segmentation
+
+**Applications:** Medical imaging (tumor detection, organ segmentation), autonomous driving (road segmentation), satellite imagery (land use), portrait mode (background separation)
+
+**Impact:** 40,000+ citations, foundation for Segment Anything (SAM 2023)
+
+---
+
+### 19. VAE (Variational Autoencoder) 📊
+**Path:** `examples/19-vae`
+**Run:** `cargo run --package vae`
+
+A probabilistic generative model that learns smooth latent representations for generation and anomaly detection.
+
+**Key Innovation:**
+- Probabilistic encoding: `x → (μ, σ)` instead of deterministic `x → z`
+- Reparameterization trick: `z = μ + σ⊙ε` enables backpropagation
+- Smooth, continuous latent space enables generation
+
+**Loss Function:**
+```
+L = Reconstruction Loss + KL Divergence
+```
+- **Reconstruction**: How well can we rebuild the input?
+- **KL Divergence**: Regularize latent space to N(0,1)
+
+**Generation Methods:**
+- Random sampling: `z ~ N(0,1)` → decode → new image
+- Interpolation: Smooth morphing between images
+- Latent arithmetic: "smile vector" + face = smiling face
+
+**Applications:** Image generation, anomaly detection, data compression, drug discovery (molecular VAE)
+
+**Modern Role:** Component in Stable Diffusion (VAE encoder/decoder), still used for anomaly detection and when fast generation matters
+
+---
+
+### 20. Diffusion Models (DDPM) 🌟
+**Path:** `examples/20-diffusion`
+**Run:** `cargo run --package diffusion`
+
+**State-of-the-art generative models** powering Stable Diffusion, DALL-E 2, Midjourney, and Imagen.
+
+**Core Idea:**
+- **Forward**: Gradually add noise to images (1000 steps)
+- **Reverse**: Learn to denoise step-by-step
+- **Generation**: Start with pure noise → denoise → clean image
+
+**Training:**
+```
+1. Sample image x_0 and noise ε
+2. Create noisy image x_t
+3. Predict noise: ε_pred = network(x_t, t)
+4. Loss: ||ε - ε_pred||²
+```
+
+**Latent Diffusion (Stable Diffusion):**
+- VAE compresses image 512×512 → 64×64 latent
+- Diffusion works in latent space (64× faster!)
+- VAE decoder: latent → final image
+
+**Text-to-Image:**
+- CLIP text encoder: "A cat..." → text embedding
+- Cross-attention: Image features attend to text
+- Classifier-free guidance: Control text strength
+
+**Why Diffusion Won:**
+- Better quality than GANs
+- Stable training (no mode collapse)
+- Higher diversity
+- Controllable generation
+
+**Applications:** Text-to-image (DALL-E, Midjourney), image editing (inpainting), super-resolution, video generation (Sora)
+
+**Impact:** Replaced GANs as #1 generative model, enabled AI art revolution, billion-dollar industry
+
+---
+
+### 21. Graph Neural Networks (GNN) 🕸️
+**Path:** `examples/21-gnn`
+**Run:** `cargo run --package gnn`
+
+Neural networks for **non-Euclidean data**: graphs with irregular structure like social networks, molecules, and knowledge graphs.
+
+**Core Concept: Message Passing**
+- Nodes communicate with neighbors
+- Aggregate neighbor information
+- Update node representations
+- After L layers: Know L-hop neighborhood
+
+**Popular Architectures:**
+- **GCN**: Graph convolutions with normalized adjacency
+- **GraphSAGE**: Sampling for scalability (millions of nodes)
+- **GAT**: Attention mechanism (learn neighbor importance)
+- **GIN**: Theoretically most expressive
+
+**Graph Tasks:**
+- **Node classification**: Predict node labels (user interests)
+- **Link prediction**: Predict missing edges (friend recommendations)
+- **Graph classification**: Classify entire graphs (molecule toxicity)
+
+**Applications:**
+- **Social networks**: Pinterest (PinSage), friend recommendations
+- **Drug discovery**: Molecular property prediction, toxicity
+- **Knowledge graphs**: Google Knowledge Graph, fact completion
+- **Recommendations**: YouTube, Amazon (user-item graphs)
+- **AlphaFold 2**: Protein structure prediction (Nobel Prize-worthy)
+- **Traffic**: Road network prediction (Uber, Google Maps)
+
+**Challenges:**
+- Over-smoothing (use 2-3 layers, not deep)
+- Scalability (sampling, clustering for large graphs)
+
+**Modern Developments:** Graph Transformers, foundation models for graphs
+
+---
+
 ## Project Structure
 
 ```
@@ -401,11 +564,16 @@ rust-ml-dl/
     ├── 13-autoencoder/           # DL Architecture: Unsupervised
     ├── 14-gan/                   # DL Architecture: Generative 🔥
     ├── 15-transformer/           # DL Architecture: Attention 🚀
-    └── 16-resnet/                # DL Architecture: Very Deep 🏆
+    ├── 16-resnet/                # DL Architecture: Very Deep 🏆
+    ├── 17-lstm-gru/              # DL Architecture: Sequences 🔗
+    ├── 18-unet/                  # DL Architecture: Segmentation 🎨
+    ├── 19-vae/                   # DL Architecture: Probabilistic Gen 📊
+    ├── 20-diffusion/             # DL Architecture: State-of-the-Art 🌟
+    └── 21-gnn/                   # DL Architecture: Graph Data 🕸️
 ```
 
 ⭐ = Implemented from scratch
-🔥🚀🏆 = Advanced deep learning architectures
+🔥🚀🏆🔗🎨📊🌟🕸️ = Advanced deep learning architectures
 
 ## Learning Paths
 
@@ -421,7 +589,7 @@ rust-ml-dl/
 7. **06-decision-trees** - Tree-based models
 8. **07-svm** - Advanced classification
 
-### 🔴 Advanced Track
+### 🔴 Advanced Track (Deep Learning Mastery)
 9. **09-neural-network** - Deep learning fundamentals
 10. **10-deep-learning-basics** - Modern DL concepts
 11. **11-cnn** - Computer vision architecture
@@ -430,6 +598,13 @@ rust-ml-dl/
 14. **14-gan** - Generative models & adversarial training
 15. **15-transformer** - Attention mechanisms & modern NLP
 16. **16-resnet** - Very deep networks & skip connections
+
+### 🟣 Expert Track (State-of-the-Art)
+17. **17-lstm-gru** - Advanced sequence modeling & long-term memory
+18. **18-unet** - Semantic segmentation & medical imaging
+19. **19-vae** - Probabilistic generative models
+20. **20-diffusion** - State-of-the-art generation (Stable Diffusion, DALL-E)
+21. **21-gnn** - Graph neural networks & non-Euclidean data
 
 ## Libraries Used
 
@@ -476,6 +651,11 @@ cargo run --package autoencoder
 cargo run --package gan
 cargo run --package transformer
 cargo run --package resnet
+cargo run --package lstm-gru
+cargo run --package unet
+cargo run --package vae
+cargo run --package diffusion
+cargo run --package gnn
 ```
 
 Build all examples:
@@ -486,17 +666,28 @@ cargo build --workspace
 
 ## What's New in This Version
 
-### 🎯 Organized Structure
-- Examples now numbered 01-16 in logical learning order
-- Clear progression from basics to state-of-the-art architectures
+### 🎯 Comprehensive Coverage
+- Examples now numbered 01-21 covering the entire ML/DL landscape
+- Clear progression: Fundamentals → Traditional ML → Deep Learning → State-of-the-Art
+- Three learning tracks: Beginner 🟢 → Advanced 🔴 → Expert 🟣
 
-### 🆕 Six Deep Learning Architectures
+### 🆕 Eleven Deep Learning Architectures
+**Core Architectures:**
 - **CNN**: Convolutional networks for computer vision
 - **RNN**: Recurrent networks for sequences (text, time series)
 - **Autoencoder**: Unsupervised learning for compression and generation
+
+**Advanced Architectures:**
 - **GAN**: Generative adversarial networks for data generation
 - **Transformer**: Attention mechanisms powering GPT, BERT, ChatGPT
 - **ResNet**: Residual networks enabling very deep architectures
+
+**State-of-the-Art Architectures (NEW!):**
+- **LSTM/GRU**: Advanced sequence modeling with long-term memory
+- **U-Net**: Semantic segmentation for medical imaging
+- **VAE**: Probabilistic generative models with smooth latent spaces
+- **Diffusion Models**: State-of-the-art generation (Stable Diffusion, DALL-E)
+- **GNN**: Graph neural networks for non-Euclidean data (social networks, molecules)
 
 ### 📖 Enhanced Documentation
 - Each example includes comprehensive theory
@@ -504,6 +695,7 @@ cargo build --workspace
 - Real-world applications and use cases
 - Historical context and modern impact
 - Comparisons between techniques
+- Production deployment considerations
 
 ## Prerequisites
 
@@ -559,12 +751,15 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 **Happy Learning!** 🦀 🤖 📊 🧠
 
 **Suggested Learning Path:**
-1. Start with `01-data-preprocessing`
-2. Work through examples 02-07 (traditional ML)
-3. Master `08-gradient-descent` (optimization fundamentals)
-4. Progress to `09-neural-network` (DL basics)
-5. Study `10-deep-learning-basics` (theory)
-6. Explore core architectures: `11-cnn`, `12-rnn`, `13-autoencoder`
-7. Master advanced architectures: `14-gan`, `15-transformer`, `16-resnet`
+1. **Foundations** (01-08): Start with `01-data-preprocessing`, work through traditional ML, master `08-gradient-descent`
+2. **Deep Learning Basics** (09-10): Understand `09-neural-network` from scratch, study `10-deep-learning-basics` theory
+3. **Core Architectures** (11-13): Learn `11-cnn` (vision), `12-rnn` (sequences), `13-autoencoder` (unsupervised)
+4. **Advanced Architectures** (14-16): Master `14-gan` (generation), `15-transformer` (attention), `16-resnet` (very deep networks)
+5. **State-of-the-Art** (17-21):
+   - `17-lstm-gru`: Advanced sequences with memory
+   - `18-unet`: Semantic segmentation
+   - `19-vae`: Probabilistic generation
+   - `20-diffusion`: Modern AI art (Stable Diffusion, DALL-E)
+   - `21-gnn`: Graph-structured data (molecules, social networks)
 
-Each example builds on previous concepts, so following the numbered order is recommended!
+Each example builds on previous concepts, so following the numbered order is recommended! The complete path takes you from basics to the cutting edge of AI.

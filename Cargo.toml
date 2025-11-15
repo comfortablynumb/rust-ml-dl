@@ -17,6 +17,11 @@ members = [
     "examples/14-gan",
     "examples/15-transformer",
     "examples/16-resnet",
+    "examples/17-lstm-gru",
+    "examples/18-unet",
+    "examples/19-vae",
+    "examples/20-diffusion",
+    "examples/21-gnn",
 ]
 
 [workspace.package]
