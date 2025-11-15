@@ -1,16 +1,19 @@
 [workspace]
 resolver = "2"
 members = [
-    "examples/linear-regression",
-    "examples/logistic-regression",
-    "examples/k-means-clustering",
-    "examples/decision-trees",
-    "examples/neural-network",
-    "examples/data-preprocessing",
-    "examples/gradient-descent",
-    "examples/svm",
-    "examples/pca",
-    "examples/deep-learning-basics",
+    "examples/01-data-preprocessing",
+    "examples/02-linear-regression",
+    "examples/03-logistic-regression",
+    "examples/04-k-means-clustering",
+    "examples/05-pca",
+    "examples/06-decision-trees",
+    "examples/07-svm",
+    "examples/08-gradient-descent",
+    "examples/09-neural-network",
+    "examples/10-deep-learning-basics",
+    "examples/11-cnn",
+    "examples/12-rnn",
+    "examples/13-autoencoder",
 ]
 
 [workspace.package]

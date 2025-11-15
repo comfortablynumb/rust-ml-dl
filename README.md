@@ -1,10 +1,10 @@
 # Rust Machine Learning & Deep Learning Examples
 
-A comprehensive collection of machine learning and deep learning examples implemented in Rust, designed for learning and experimentation.
+A comprehensive collection of **13 fully documented machine learning and deep learning examples** implemented in Rust, organized in a clear learning progression.
 
 ## Overview
 
-This repository contains fully documented, runnable examples covering fundamental ML/DL concepts, from basic linear regression to neural networks. Each example includes:
+This repository contains fully documented, runnable examples covering fundamental ML/DL concepts, from data preprocessing to advanced deep learning architectures. Each example includes:
 
 - **Detailed explanations** of concepts and algorithms
 - **Runnable code** with clear comments
@@ -19,34 +19,51 @@ This repository contains fully documented, runnable examples covering fundamenta
 git clone https://github.com/yourusername/rust-ml-dl.git
 cd rust-ml-dl
 
-# Run any example
-cargo run --package linear-regression
+# Run any example (use the package name without the number prefix)
+cargo run --package data-preprocessing
 cargo run --package neural-network
-cargo run --package gradient-descent
+cargo run --package cnn
 ```
 
-## Examples
+## 📚 Examples (In Learning Order)
 
-### Supervised Learning
+### 01. Data Preprocessing
+**Path:** `examples/01-data-preprocessing`
+**Run:** `cargo run --package data-preprocessing`
 
-#### 1. Linear Regression
-**Path:** `examples/linear-regression`
+Essential techniques for preparing data for machine learning.
+
+**Topics:**
+- Feature scaling (standardization, normalization)
+- Missing value imputation
+- Outlier detection (IQR method)
+- Train/test splitting
+- Feature engineering
+
+**Why Start Here:** Data preprocessing is often the most important step in ML pipelines!
+
+---
+
+## Supervised Learning
+
+### 02. Linear Regression
+**Path:** `examples/02-linear-regression`
 **Run:** `cargo run --package linear-regression`
 
-Learn to predict continuous values using linear relationships.
+Predict continuous values using linear relationships.
 
 **Key Concepts:**
 - Least squares method
 - Mean Squared Error (MSE)
 - R² score evaluation
-- Train/test splitting
+- Model interpretation
 
 **Use Cases:** House price prediction, sales forecasting, trend analysis
 
 ---
 
-#### 2. Logistic Regression
-**Path:** `examples/logistic-regression`
+### 03. Logistic Regression
+**Path:** `examples/03-logistic-regression`
 **Run:** `cargo run --package logistic-regression`
 
 Binary classification using the sigmoid function.
@@ -57,51 +74,21 @@ Binary classification using the sigmoid function.
 - Confusion matrix
 - Precision, recall, F1-score
 
-**Use Cases:** Spam detection, medical diagnosis, credit risk
+**Use Cases:** Spam detection, medical diagnosis, credit risk assessment
 
 ---
 
-#### 3. Decision Trees
-**Path:** `examples/decision-trees`
-**Run:** `cargo run --package decision-trees`
+## Unsupervised Learning
 
-Interpretable classification using tree-based rules.
-
-**Key Concepts:**
-- Gini impurity
-- Information gain
-- Tree pruning
-- Overfitting prevention
-
-**Use Cases:** Medical diagnosis, credit approval, rule-based classification
-
----
-
-#### 4. Support Vector Machines (SVM)
-**Path:** `examples/svm`
-**Run:** `cargo run --package svm`
-
-Find maximum-margin hyperplanes for classification.
-
-**Key Concepts:**
-- Maximum margin
-- Support vectors
-- Kernel trick
-- Soft vs hard margin
-
-**Use Cases:** Text classification, image recognition, bioinformatics
-
-### Unsupervised Learning
-
-#### 5. K-Means Clustering
-**Path:** `examples/k-means-clustering`
+### 04. K-Means Clustering
+**Path:** `examples/04-k-means-clustering`
 **Run:** `cargo run --package k-means-clustering`
 
 Group similar data points without labels.
 
 **Key Concepts:**
 - Centroid calculation
-- Elbow method
+- Elbow method for choosing K
 - Within-cluster sum of squares (WCSS)
 - Cluster assignment
 
@@ -109,8 +96,8 @@ Group similar data points without labels.
 
 ---
 
-#### 6. Principal Component Analysis (PCA)
-**Path:** `examples/pca`
+### 05. Principal Component Analysis (PCA)
+**Path:** `examples/05-pca`
 **Run:** `cargo run --package pca`
 
 Reduce dimensionality while preserving variance.
@@ -123,13 +110,49 @@ Reduce dimensionality while preserving variance.
 
 **Use Cases:** Visualization, noise reduction, feature engineering
 
-### Optimization & Fundamentals
+---
 
-#### 7. Gradient Descent
-**Path:** `examples/gradient-descent`
+## Advanced Supervised Learning
+
+### 06. Decision Trees
+**Path:** `examples/06-decision-trees`
+**Run:** `cargo run --package decision-trees`
+
+Interpretable classification using tree-based rules.
+
+**Key Concepts:**
+- Gini impurity
+- Information gain
+- Tree pruning strategies
+- Overfitting prevention
+
+**Use Cases:** Medical diagnosis, credit approval, rule-based systems
+
+---
+
+### 07. Support Vector Machines (SVM)
+**Path:** `examples/07-svm`
+**Run:** `cargo run --package svm`
+
+Find maximum-margin hyperplanes for classification.
+
+**Key Concepts:**
+- Maximum margin principle
+- Support vectors
+- Kernel trick (non-linear classification)
+- Soft vs hard margin
+
+**Use Cases:** Text classification, image recognition, bioinformatics
+
+---
+
+## Optimization Fundamentals
+
+### 08. Gradient Descent ⭐
+**Path:** `examples/08-gradient-descent`
 **Run:** `cargo run --package gradient-descent`
 
-**Implementation from scratch!** Understand the core optimization algorithm powering ML.
+**Implementation from scratch!** The core optimization algorithm powering ML.
 
 **Key Concepts:**
 - Batch gradient descent
@@ -137,36 +160,21 @@ Reduce dimensionality while preserving variance.
 - Mini-batch gradient descent
 - Learning rate effects
 
-**Importance:** Foundation for training neural networks and most ML models
+**Why Important:** Foundation for training neural networks and most ML models
 
 ---
 
-#### 8. Data Preprocessing
-**Path:** `examples/data-preprocessing`
-**Run:** `cargo run --package data-preprocessing`
+## Deep Learning
 
-Essential techniques for preparing data for ML.
-
-**Key Concepts:**
-- Feature scaling (standardization, normalization)
-- Missing value imputation
-- Outlier detection (IQR method)
-- Train/test splitting
-- Feature engineering
-
-**Importance:** Often the most critical step in ML pipelines!
-
-### Deep Learning
-
-#### 9. Neural Networks
-**Path:** `examples/neural-network`
+### 09. Neural Networks ⭐
+**Path:** `examples/09-neural-network`
 **Run:** `cargo run --package neural-network`
 
-**Implementation from scratch!** Build a feedforward network with backpropagation.
+**Implementation from scratch!** Feedforward network with backpropagation.
 
 **Key Concepts:**
 - Forward propagation
-- Backpropagation
+- Backpropagation algorithm
 - Activation functions (ReLU, Sigmoid)
 - Binary cross-entropy loss
 - Weight initialization
@@ -175,68 +183,149 @@ Essential techniques for preparing data for ML.
 
 ---
 
-#### 10. Deep Learning Basics
-**Path:** `examples/deep-learning-basics`
+### 10. Deep Learning Basics
+**Path:** `examples/10-deep-learning-basics`
 **Run:** `cargo run --package deep-learning-basics`
 
 Comprehensive guide to deep learning concepts and best practices.
 
 **Topics Covered:**
-- Activation functions comparison
+- Activation functions (Sigmoid, Tanh, ReLU, Leaky ReLU, Softmax)
 - Loss functions (BCE, CCE, MSE, MAE)
-- Regularization (L1/L2, Dropout)
-- Optimization algorithms (SGD, Adam)
-- Common architectures (CNN, RNN, Transformer)
+- Regularization techniques (L1/L2, Dropout, Early Stopping)
+- Optimization algorithms (SGD, Momentum, Adam)
+- Common architectures (CNN, RNN, Transformer, GAN, Autoencoder)
 - Training best practices
+- Hyperparameter tuning
+
+---
+
+## Deep Learning Architectures
+
+### 11. Convolutional Neural Networks (CNN) 🆕
+**Path:** `examples/11-cnn`
+**Run:** `cargo run --package cnn`
+
+The architecture that revolutionized computer vision.
+
+**Key Operations:**
+- Convolution (feature detection with filters)
+- Pooling (dimensionality reduction)
+- Multiple feature maps
+- Hierarchical feature learning
+
+**Key Concepts:**
+- Local connectivity
+- Parameter sharing
+- Translation invariance
+- Edge detection, texture recognition
+
+**Applications:** Image classification, object detection, face recognition, medical imaging
+
+**Famous Architectures:** LeNet, AlexNet, VGG, ResNet, EfficientNet
+
+---
+
+### 12. Recurrent Neural Networks (RNN) 🆕
+**Path:** `examples/12-rnn`
+**Run:** `cargo run --package rnn`
+
+Designed for sequential data like text, time series, and speech.
+
+**Key Concepts:**
+- Hidden state (memory across time steps)
+- Sequence processing patterns
+- Vanishing/exploding gradients
+- LSTM and GRU variants
+
+**Architectures:**
+- Many-to-One (sentiment analysis)
+- One-to-Many (image captioning)
+- Many-to-Many (translation, video labeling)
+- Seq2Seq (encoder-decoder)
+
+**Applications:** Machine translation, text generation, speech recognition, time series forecasting
+
+**Modern Note:** Transformers have largely replaced RNNs for NLP, but RNNs remain useful for streaming/online processing
+
+---
+
+### 13. Autoencoders 🆕
+**Path:** `examples/13-autoencoder`
+**Run:** `cargo run --package autoencoder`
+
+Unsupervised learning for compression, denoising, and generation.
+
+**Architecture:**
+- Encoder: Compresses input to latent representation
+- Bottleneck: Low-dimensional latent space
+- Decoder: Reconstructs from latent code
+
+**Variants:**
+- Vanilla Autoencoder (basic compression)
+- Denoising Autoencoder (noise removal)
+- Variational Autoencoder (VAE - generation)
+- Sparse Autoencoder (interpretable features)
+
+**Applications:** Dimensionality reduction, anomaly detection, image denoising, data generation, compression
+
+**Modern Impact:** VAEs power Stable Diffusion and DALL-E!
+
+---
 
 ## Project Structure
 
 ```
 rust-ml-dl/
-├── Cargo.toml              # Workspace configuration
-├── README.md               # This file
-├── examples/
-│   ├── linear-regression/
-│   │   ├── src/main.rs    # Implementation
-│   │   ├── Cargo.toml     # Dependencies
-│   │   └── README.md      # Detailed docs
-│   ├── logistic-regression/
-│   ├── k-means-clustering/
-│   ├── decision-trees/
-│   ├── gradient-descent/
-│   ├── svm/
-│   ├── pca/
-│   ├── neural-network/
-│   ├── data-preprocessing/
-│   └── deep-learning-basics/
-└── LICENSE
+├── Cargo.toml                    # Workspace configuration
+├── README.md                     # This file
+└── examples/
+    ├── 01-data-preprocessing/    # Data preparation
+    ├── 02-linear-regression/     # Supervised: Regression
+    ├── 03-logistic-regression/   # Supervised: Classification
+    ├── 04-k-means-clustering/    # Unsupervised: Clustering
+    ├── 05-pca/                   # Unsupervised: Dimensionality reduction
+    ├── 06-decision-trees/        # Supervised: Tree-based
+    ├── 07-svm/                   # Supervised: Margin-based
+    ├── 08-gradient-descent/      # Optimization ⭐
+    ├── 09-neural-network/        # Deep Learning basics ⭐
+    ├── 10-deep-learning-basics/  # DL concepts & theory
+    ├── 11-cnn/                   # DL Architecture: Images 🆕
+    ├── 12-rnn/                   # DL Architecture: Sequences 🆕
+    └── 13-autoencoder/           # DL Architecture: Unsupervised 🆕
 ```
 
-## Learning Path
+⭐ = Implemented from scratch
+🆕 = New deep learning architecture examples
 
-### Beginner Track
-1. **Linear Regression** - Start here! Simple and intuitive
-2. **Logistic Regression** - Introduction to classification
-3. **Data Preprocessing** - Essential data preparation techniques
-4. **K-Means Clustering** - Unsupervised learning basics
+## Learning Paths
 
-### Intermediate Track
-5. **Gradient Descent** - Understand optimization fundamentals
-6. **Decision Trees** - Learn tree-based models
-7. **PCA** - Dimensionality reduction
-8. **SVM** - Advanced classification
+### 🟢 Beginner Track (Start Here!)
+1. **01-data-preprocessing** - Essential data preparation
+2. **02-linear-regression** - Simplest ML algorithm
+3. **03-logistic-regression** - Introduction to classification
+4. **04-k-means-clustering** - Unsupervised learning basics
 
-### Advanced Track
-9. **Neural Networks** - Deep learning fundamentals
-10. **Deep Learning Basics** - Modern DL concepts and architectures
+### 🟡 Intermediate Track
+5. **08-gradient-descent** - Understand optimization
+6. **05-pca** - Dimensionality reduction
+7. **06-decision-trees** - Tree-based models
+8. **07-svm** - Advanced classification
+
+### 🔴 Advanced Track
+9. **09-neural-network** - Deep learning fundamentals
+10. **10-deep-learning-basics** - Modern DL concepts
+11. **11-cnn** - Computer vision architecture
+12. **12-rnn** - Sequential data architecture
+13. **13-autoencoder** - Unsupervised deep learning
 
 ## Libraries Used
 
 - **[ndarray](https://github.com/rust-ndarray/ndarray)** - N-dimensional arrays (like NumPy)
-- **[linfa](https://github.com/rust-ml/linfa)** - Comprehensive ML framework
+- **[linfa](https://github.com/rust-ml/linfa)** - Comprehensive ML framework for Rust
   - `linfa-linear` - Linear models
   - `linfa-logistic` - Logistic regression
-  - `linfa-clustering` - K-means and other clustering
+  - `linfa-clustering` - K-means and clustering algorithms
   - `linfa-trees` - Decision trees and random forests
   - `linfa-svm` - Support vector machines
   - `linfa-reduction` - PCA and dimensionality reduction
@@ -244,26 +333,34 @@ rust-ml-dl/
 
 ## Key Features
 
-- **Pedagogical Focus**: Code written for learning, not just performance
-- **Comprehensive Documentation**: Every concept explained with math and intuition
-- **Runnable Examples**: All code compiles and runs out of the box
-- **From Scratch Implementations**: Neural networks and gradient descent implemented without high-level ML libraries
-- **Real-World Context**: Use cases and applications for each technique
-- **Best Practices**: Training tips, hyperparameter tuning, evaluation metrics
+- **📖 Pedagogical Focus**: Code written for learning, not just performance
+- **📚 Comprehensive Documentation**: Every concept explained with math and intuition
+- **▶️ Runnable Examples**: All code compiles and runs out of the box
+- **🔧 From-Scratch Implementations**: Core algorithms (gradient descent, neural networks) built without high-level ML libraries
+- **🌍 Real-World Context**: Use cases and applications for each technique
+- **✅ Best Practices**: Training tips, hyperparameter tuning, evaluation metrics
+- **🎯 Clear Progression**: Organized from fundamentals to advanced topics
 
 ## Running Examples
 
-Each example can be run independently:
+Each example can be run independently using the **package name** (without number prefix):
 
 ```bash
-# Run a specific example
-cargo run --package <example-name>
-
-# Examples
-cargo run --package linear-regression
-cargo run --package neural-network
+# Fundamentals
+cargo run --package data-preprocessing
 cargo run --package gradient-descent
+
+# Traditional ML
+cargo run --package linear-regression
 cargo run --package k-means-clustering
+cargo run --package decision-trees
+
+# Deep Learning
+cargo run --package neural-network
+cargo run --package deep-learning-basics
+cargo run --package cnn
+cargo run --package rnn
+cargo run --package autoencoder
 ```
 
 Build all examples:
@@ -272,9 +369,26 @@ Build all examples:
 cargo build --workspace
 ```
 
+## What's New in This Version
+
+### 🎯 Organized Structure
+- Examples now numbered 01-13 in logical learning order
+- Clear progression from basics to advanced topics
+
+### 🆕 Three New Deep Learning Architectures
+- **CNN**: Convolutional networks for computer vision
+- **RNN**: Recurrent networks for sequences (text, time series)
+- **Autoencoder**: Unsupervised learning for compression and generation
+
+### 📖 Enhanced Documentation
+- Each example includes comprehensive theory
+- Mathematical foundations with clear explanations
+- Real-world applications and use cases
+- Comparisons between techniques
+
 ## Prerequisites
 
-- Rust 1.70 or higher
+- **Rust 1.70+**
 - Basic understanding of:
   - Linear algebra (vectors, matrices)
   - Calculus (derivatives, gradients)
@@ -289,24 +403,26 @@ cargo build --workspace
 - [The Elements of Statistical Learning](https://hastie.su.domains/ElemStatLearn/) by Hastie, Tibshirani, Friedman
 
 ### Online Courses
-- [CS229: Machine Learning](http://cs229.stanford.edu/) - Stanford
-- [CS231n: CNNs for Visual Recognition](http://cs231n.stanford.edu/) - Stanford
+- [CS229: Machine Learning](http://cs229.stanford.edu/) - Stanford (Traditional ML)
+- [CS231n: CNNs for Visual Recognition](http://cs231n.stanford.edu/) - Stanford (Deep Learning for Vision)
+- [CS224n: NLP with Deep Learning](http://web.stanford.edu/class/cs224n/) - Stanford (RNNs, Transformers)
 - [Fast.ai Practical Deep Learning](https://www.fast.ai/)
 
 ### Rust-Specific
 - [Linfa Documentation](https://rust-ml.github.io/linfa/)
 - [ndarray Documentation](https://docs.rs/ndarray/)
-- [Are We Learning Yet?](http://www.arewelearningyet.com/) - Rust ML ecosystem
+- [Are We Learning Yet?](http://www.arewelearningyet.com/) - Rust ML ecosystem overview
 
 ## Contributing
 
-Contributions are welcome! Here are some ways to contribute:
+Contributions are welcome! Ways to contribute:
 
-- Add new examples (Random Forests, XGBoost, GANs, etc.)
+- Add new examples (Random Forests, XGBoost, Transformers, GANs, etc.)
 - Improve documentation and explanations
 - Fix bugs or optimize implementations
 - Add visualizations or plots
 - Suggest new learning resources
+- Improve example clarity
 
 ## License
 
@@ -317,9 +433,18 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - The Rust ML community and [linfa](https://github.com/rust-ml/linfa) project
 - The [ndarray](https://github.com/rust-ndarray/ndarray) developers
 - Machine learning educators and researchers worldwide
+- The deep learning community for advancing the field
 
 ---
 
-**Happy Learning!** 🦀 🤖 📊
+**Happy Learning!** 🦀 🤖 📊 🧠
 
-Start with `cargo run --package linear-regression` and work your way through the examples!
+**Suggested Learning Path:**
+1. Start with `01-data-preprocessing`
+2. Work through examples 02-07 (traditional ML)
+3. Master `08-gradient-descent` (optimization fundamentals)
+4. Progress to `09-neural-network` (DL basics)
+5. Study `10-deep-learning-basics` (theory)
+6. Explore architectures: `11-cnn`, `12-rnn`, `13-autoencoder`
+
+Each example builds on previous concepts, so following the numbered order is recommended!
