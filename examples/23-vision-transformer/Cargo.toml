@@ -1,0 +1,13 @@
+[package]
+name = "vision-transformer"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+
+[[bin]]
+name = "vision-transformer"
+path = "src/main.rs"
+
+[dependencies]
+ndarray = { workspace = true }

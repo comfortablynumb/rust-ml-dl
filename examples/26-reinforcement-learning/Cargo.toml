@@ -1,0 +1,14 @@
+[package]
+name = "reinforcement-learning"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+
+[[bin]]
+name = "reinforcement-learning"
+path = "src/main.rs"
+
+[dependencies]
+ndarray = { workspace = true }
+rand = { workspace = true }

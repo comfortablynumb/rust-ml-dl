@@ -22,6 +22,11 @@ members = [
     "examples/19-vae",
     "examples/20-diffusion",
     "examples/21-gnn",
+    "examples/22-attention",
+    "examples/23-vision-transformer",
+    "examples/24-object-detection",
+    "examples/25-siamese-networks",
+    "examples/26-reinforcement-learning",
 ]
 
 [workspace.package]

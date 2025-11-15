@@ -1,0 +1,13 @@
+[package]
+name = "siamese-networks"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+
+[[bin]]
+name = "siamese-networks"
+path = "src/main.rs"
+
+[dependencies]
+ndarray = { workspace = true }

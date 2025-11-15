@@ -1,6 +1,6 @@
 # Rust Machine Learning & Deep Learning Examples
 
-A comprehensive collection of **21 fully documented machine learning and deep learning examples** implemented in Rust, organized in a clear learning progression from fundamentals to state-of-the-art architectures.
+A comprehensive collection of **26 fully documented machine learning and deep learning examples** implemented in Rust, covering the complete spectrum from fundamentals to cutting-edge AI architectures.
 
 ## Overview
 
@@ -542,6 +542,194 @@ Neural networks for **non-Euclidean data**: graphs with irregular structure like
 
 ---
 
+### 22. Attention Mechanisms 🔍
+**Path:** `examples/22-attention`
+**Run:** `cargo run --package attention`
+
+The foundational mechanism powering Transformers, BERT, GPT, and all modern NLP.
+
+**Core Innovation: Query, Key, Value Framework**
+- Dynamically focus on relevant parts of input
+- No fixed context window like RNNs
+- Parallelizable (no sequential dependency)
+
+**Key Formula:**
+```
+Attention(Q, K, V) = softmax(QK^T / √d_k) V
+```
+
+**Variants:**
+- **Self-Attention**: Sequence attends to itself
+- **Cross-Attention**: Attend to different sequence (encoder-decoder)
+- **Multi-Head Attention**: Multiple parallel attention patterns
+- **Masked Attention**: Prevent looking ahead (GPT-style)
+
+**Why It Won:**
+- Replaced RNNs as primary sequence model
+- Enables parallelization (100× faster training)
+- Better long-range dependencies
+- Interpretable (visualize attention weights)
+
+**Applications:** Machine translation, image captioning, question answering, document classification
+
+**Historical Impact:** Foundation of Transformer (2017), which led to BERT, GPT, and the modern AI revolution
+
+---
+
+### 23. Vision Transformer (ViT) 👁️
+**Path:** `examples/23-vision-transformer`
+**Run:** `cargo run --package vision-transformer`
+
+Pure Transformer architecture for images - no convolutions needed!
+
+**Core Idea: Images as Sequences**
+- Split image into patches (16×16)
+- Linear embedding of patches
+- Add positional encodings
+- Standard Transformer encoder
+- Classification from [CLS] token
+
+**Architecture:**
+```
+Image 224×224 → 196 patches (16×16 each) → Transformer → Classification
+```
+
+**Why It Works:**
+- Global receptive field from layer 1
+- Minimal inductive bias (learns from data)
+- Scales better than CNNs with massive data
+
+**Data Requirements:**
+- ImageNet (1.3M): CNN > ViT
+- JFT-300M (300M): ViT > CNN
+
+**Variants:**
+- **DeiT**: Data-efficient (distillation from CNNs)
+- **Swin Transformer**: Hierarchical, shifted windows
+- **BEiT**: Masked image modeling (like BERT for images)
+
+**Applications:** Image classification, object detection (DETR), segmentation, CLIP (vision-language), DALL-E, Stable Diffusion components
+
+**Impact:** Proved Transformers work beyond NLP, unified architecture across modalities
+
+---
+
+### 24. Object Detection (YOLO) 📦
+**Path:** `examples/24-object-detection`
+**Run:** `cargo run --package object-detection`
+
+Real-time object detection: "You Only Look Once"
+
+**Innovation: Single-Shot Detection**
+- Traditional: 2000+ region proposals → slow
+- YOLO: Single forward pass → 45+ FPS
+
+**How It Works:**
+- Divide image into S×S grid (7×7)
+- Each cell predicts B bounding boxes + class probabilities
+- Output: 7×7×30 tensor (all predictions at once)
+
+**Architecture:**
+- CNN backbone (24 conv layers)
+- Fully connected layers
+- Direct prediction of bbox coordinates + classes
+
+**YOLO Evolution:**
+- YOLOv1 (2015): 45 FPS, original
+- YOLOv3 (2018): Multi-scale, better accuracy
+- YOLOv5 (2020): PyTorch, easy deployment
+- YOLOv8 (2023): Anchor-free, current SOTA
+
+**Applications:** Autonomous driving (Tesla), surveillance, robotics, sports analytics, retail inventory
+
+**Impact:** Enabled real-time object detection, critical for autonomous vehicles and robotics
+
+---
+
+### 25. Siamese Networks 👯
+**Path:** `examples/25-siamese-networks`
+**Run:** `cargo run --package siamese-networks`
+
+Learn similarity between inputs using twin networks with shared weights.
+
+**Core Concept:**
+```
+Input 1 → Network \
+                   → Compare embeddings → Similar/Different
+Input 2 → Network /
+  (shared weights)
+```
+
+**Key Innovation: Metric Learning**
+- Learn embedding space where similar inputs are close
+- Dissimilar inputs are far apart
+- Generalizes to new classes (one-shot learning)
+
+**Loss Functions:**
+- **Contrastive Loss**: Pull similar together, push dissimilar apart
+- **Triplet Loss**: Anchor closer to positive than negative
+
+**Applications:**
+- **Face verification**: FaceNet (99.63% accuracy), phone unlock
+- **One-shot learning**: Character recognition with few examples
+- **Image retrieval**: Google Images, Pinterest
+- **Signature verification**: Banking, legal
+
+**Modern Context:**
+- **Contrastive Learning**: SimCLR, MoCo (self-supervised)
+- **CLIP**: Dual encoder (image + text), powers Stable Diffusion/DALL-E
+- **Face recognition**: Security systems, photo organization
+
+**Impact:** Pioneered metric learning, foundation for modern contrastive learning and multi-modal AI
+
+---
+
+### 26. Reinforcement Learning (DQN) 🎮
+**Path:** `examples/26-reinforcement-learning`
+**Run:** `cargo run --package reinforcement-learning`
+
+Learn through interaction: Agent learns from trial and error using Deep Q-Networks.
+
+**Different Paradigm:**
+- Supervised: (input, label) pairs
+- RL: Agent + Environment + Rewards → Learn policy
+
+**The RL Loop:**
+```
+Observe state → Take action → Receive reward → Update policy → Repeat
+Goal: Maximize cumulative reward
+```
+
+**DQN Innovations:**
+1. **Experience Replay**: Store transitions, sample randomly
+2. **Target Network**: Stabilize training (frozen copy)
+3. **Function Approximation**: Neural network for Q(state, action)
+
+**Architecture:**
+- Input: 84×84×4 game frames
+- 3 conv layers + 2 fully connected
+- Output: Q-value for each action
+
+**Exploration vs Exploitation:**
+- Epsilon-greedy: Balance trying new actions vs using knowledge
+- Decay epsilon over time (1.0 → 0.01)
+
+**Applications:**
+- **Game Playing**: Human-level Atari, AlphaGo, StarCraft II, Dota 2
+- **Robotics**: Manipulation, navigation, locomotion
+- **Resource Management**: Data center cooling (Google, 40% energy reduction), traffic control
+- **Recommendations**: YouTube, Netflix (long-term engagement)
+
+**DQN Improvements:**
+- Double DQN, Dueling DQN, Prioritized replay
+- Rainbow DQN: Combines 6 improvements, SOTA Atari
+
+**Modern RL:** PPO, SAC (policy gradient), model-based RL, offline RL
+
+**Impact:** Proved deep learning works for sequential decision making, enabled AI for robotics and complex strategy games
+
+---
+
 ## Project Structure
 
 ```
@@ -569,11 +757,16 @@ rust-ml-dl/
     ├── 18-unet/                  # DL Architecture: Segmentation 🎨
     ├── 19-vae/                   # DL Architecture: Probabilistic Gen 📊
     ├── 20-diffusion/             # DL Architecture: State-of-the-Art 🌟
-    └── 21-gnn/                   # DL Architecture: Graph Data 🕸️
+        ├── 21-gnn/                   # DL Architecture: Graph Data 🕸️
+    ├── 22-attention/            # Core Concept: Attention 🔍
+    ├── 23-vision-transformer/   # Transformers for Vision 👁️
+    ├── 24-object-detection/     # Real-time Detection 📦
+    ├── 25-siamese-networks/     # Similarity Learning 👯
+    └── 26-reinforcement-learning/ # RL & DQN 🎮
 ```
 
 ⭐ = Implemented from scratch
-🔥🚀🏆🔗🎨📊🌟🕸️ = Advanced deep learning architectures
+🔥🚀🏆🔗🎨📊🌟🕸️🔍👁️📦👯🎮 = Advanced deep learning architectures
 
 ## Learning Paths
 
