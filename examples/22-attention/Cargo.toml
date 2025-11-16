@@ -1,0 +1,13 @@
+[package]
+name = "attention"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+
+[[bin]]
+name = "attention"
+path = "src/main.rs"
+
+[dependencies]
+ndarray = { workspace = true }

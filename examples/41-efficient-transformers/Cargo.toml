@@ -1,0 +1,8 @@
+[package]
+name = "efficient-transformers"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+ndarray = "0.16"
+rand = "0.8"

@@ -1,0 +1,13 @@
+[package]
+name = "object-detection"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+
+[[bin]]
+name = "object-detection"
+path = "src/main.rs"
+
+[dependencies]
+ndarray = { workspace = true }
